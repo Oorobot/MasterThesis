@@ -1,0 +1,68 @@
+% !Mode:: "TeX:UTF-8"
+\documentclass[type=master,openany,pifootnote]{shuthesis}
+% 选项:
+%  type=[master|doctor],            % 必选
+%  secret,                          % 可选 (如果论文需要保密, 这一项需要打开)
+%  pifootnote,                      % 可选（建议打开）
+%  openany|openright,               % 可选 (章首页是右开还是任意开, 默认是右开)
+%  nocolor                          % 提交最终版本时请打开此选项
+\usepackage{shuthesis}
+\graphicspath{{figures/}}
+
+\begin{document}
+\frontmatter
+\shusetup{
+  %%%%%%%% 1. 配置里面不要出现空行. 2. 不需要的配置信息可以删除. %%%%%%%%%%%
+  secretlevel={公开},             % 秘级
+  % 中文信息
+  ctitle={基于深度学习的骨三相和\texorpdfstring{PET/CT}{PETCT}的骨科感染诊断研究},
+  cdisciplines={工学},
+  cdepartment={计算机工程与科学学院},
+  cmajor={计算机科学与技术},
+  cauthor={聂良兵},
+  csupervisor={李成范},
+  id={21721570},
+  catalognumber={TP391},
+  cdate={2024 年 3 月},
+  coverdate={\zhdigits{2024}年\zhnumber{3}月},
+  % 英文信息
+  etitle={Research on the Diagnosis of Orthopedic Infection Based on Three-Phase Bone Scan and PET/CT with Deep Learning},
+  edisciplines={Engineering},
+  edepartment={Schoool of Computer Engineering and Science},
+  emajor={Computer Science and Technology},
+  eauthor={Liangbing Nie},
+  esupervisor={Chengfan Li},
+  edate={March, 2024}
+}
+
+\input{data/abstract}
+\makefirstpage                         % 生成带有学校 logo 的封面
+\makecover
+
+\tableofcontents                       % 目录
+\listoffigures                        % 插图索引
+\listoftables                         % 表格索引
+
+% 正文部分
+\mainmatter
+\include{data/chap01}
+\include{data/chap02}
+\include{data/chap03}
+\include{data/chap04}
+\include{data/chap05}
+\include{data/chap06}
+
+% 参考文献. 
+\bibliographystyle{reference/gbt7714-numerical}
+\bibliography{reference/refs}
+
+\include{data/publications}           % 发表论文清单
+\include{data/projects}               % 项目清单
+\include{data/acknowledgement}        % 致谢
+
+\backmatter
+% \begin{appendix}
+% \input{data/appendix}
+% \end{appendix}
+
+\end{document}

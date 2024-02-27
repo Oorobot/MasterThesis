@@ -48,7 +48,7 @@
     \label{fig:chap05_preview}
 \end{figure}
 
-图\ref{fig:chap05_preview}呈现的是所设计的骨科相关感染的自动化辅助诊断系统界面，该界面主要分为侧边导航栏和中心的可视化显示区域。侧边导航栏详细展示了文件解析模块处理所得DICOM和NIfTI文件的层次化结构信息，而在其顶部则放置了一系列的功能按钮，涵盖了打开文件、删除已解析的影像数据、二维影像展示、三维影像展示、二维影像融合以及三维影像融合。
+图\ref{fig:chap05_preview}呈现的是所设计的骨科相关感染自动化辅助诊断系统的界面。界面主要分为侧边导航栏和中心的可视化显示区域。在侧边导航栏中，展示了DICOM和NIfTI文件由文件解析模块处理所得的层次化结构信息。该信息采用了可折叠的列表按钮的形式，详细地列出了患者的姓名拼音与影像扫描的具体时间，并在其内部展示了归属于当前患者的影像数据，例如系列描述与影像尺寸信息。用户可以通过点击列表按钮来显示或隐藏对应的影像数据。侧边栏顶部设置了多个功能按钮，包括打开文件、删除已解析的影像数据、二维影像展示、三维影像展示、二维影像融合以及三维影像融合。
 
 在用户交互过程中，操作者需在侧边导航栏选定特定的医学影像数据，并通过点击顶部工具栏中的相应按钮来指导系统进行所需的操作。特别指出，在选中影像数据进行操作时，系统限制用户同时选定的影像数据最大数量为二。这一约束的设置是源于系统对双模态影像融合的特定支持，并旨在确保处理过程中对数据的精确操作和可控度。
 
@@ -57,24 +57,21 @@
 \begin{figure}[htbp]
     \centering
     \subfloat[二维展示]{
-        \includegraphics[width=0.48\textwidth]{figures/chap05_view_2D.png}
+        \includegraphics[width=0.49\textwidth]{figures/chap05_view_2D.png}
         \label{fig:chap05_view_2D}
     }
-    % \hfill
     \subfloat[二维融合]{
-        \includegraphics[width=0.48\linewidth]{figures/chap05_view_2DF.png}
+        \includegraphics[width=0.49\linewidth]{figures/chap05_view_2DF.png}
         \label{fig:chap05_view_2DF}
     }
     \newline
     \newline
-    \newline
     \subfloat[三维展示]{
-        \includegraphics[width=0.48\linewidth]{figures/chap05_view_3D.png}
+        \includegraphics[width=0.49\linewidth]{figures/chap05_view_3D.png}
         \label{fig:chap05_view_3D}
     }
-    % \hfill
     \subfloat[三维融合]{
-        \includegraphics[width=0.48\linewidth]{figures/chap05_view_3DF.png}
+        \includegraphics[width=0.49\linewidth]{figures/chap05_view_3DF.png}
         \label{fig:chap05_view_3DF}
     }
     \newline
@@ -105,13 +102,21 @@
 
 \begin{figure}[htbp]
     \centering
-    \subfloat[暂不支持]{\includegraphics[width=0.24\textwidth]{figures/chap05_messagebox1.png}\label{fig:chap05_messagebox1}}{}
-    \hfill
-    \subfloat[选择膝或髋]{\includegraphics[width=0.24\textwidth]{figures/chap05_messagebox3.png}\label{fig:chap05_messagebox3}}{}
-    \hfill
-    \subfloat[处理中]{\includegraphics[width=0.24\textwidth]{figures/chap05_messagebox2.png}\label{fig:chap05_messagebox2}}{}
-    \hfill
-    \subfloat[感兴趣区域]{\includegraphics[width=0.24\textwidth]{figures/chap05_messagebox4.png}\label{fig:chap05_messagebox4}}{}
+    \subfloat[暂不支持]{
+        \includegraphics[width=0.24\textwidth]{chap05_messagebox1.png}
+        \label{fig:chap05_messagebox1}
+    }
+    \subfloat[选择膝或髋]{
+        \includegraphics[width=0.24\textwidth]{chap05_messagebox3.png}
+        \label{fig:chap05_messagebox3}
+    }
+    \subfloat[处理中]{\includegraphics[width=0.24\textwidth]{chap05_messagebox2.png}
+        \label{fig:chap05_messagebox2}
+    }
+    \subfloat[感兴趣区域]{
+        \includegraphics[width=0.24\textwidth]{chap05_messagebox4.png}
+        \label{fig:chap05_messagebox4}
+    }
     \label{fig:chap05_messagebox}
     \caption{消息框}
 \end{figure}
@@ -262,43 +267,71 @@
 
 \section{案例分析}
 
-在本节中，将演示本章介绍的自动诊断与可视化方法对三例病例的应用。病例包括：患者A，在膝关节置换手术后两月于2016年1月在上海市第六人民医院接受了检查；患者B，在接受了髋关节置换手术两年后于2016年4月在上海市第六人民医院接受了复查；患者C，在右侧股骨发生骨折并接受了治疗后于2016年11月在上海市第六人民医院进行了检查。
+在本节中，将示范自动诊断与可视化方法对以下三个病例的应用实践：
+
+（1）患者A在膝关节置换手术后两月于2016年1月在上海市第六人民医院核医学科接受了膝部的动态骨显像扫描，医生通过影像分析初步判定膝假体处可能感染，并在评估病症、临床表现以及影像与血液检验结果后，确诊为膝关节假体感染。
+
+（2）患者B在髋关节置换术后两年的2016年4月，在上海市第六人民医院核医学科进行了髋部动态骨显像扫描。经影像学分析怀疑髋假体发生感染，最终依据全面诊断确诊为假体髋关节感染。
+
+（3）患者C在右股骨骨折治疗后，于2016年11月在上海市第六人民医院核医学科接受PET/CT扫描。医生经过影像学判断，疑似感染性病灶存在。借助微生物培养、病理分析及临床综合判断，确认患者存在骨折相关感染。
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=\textwidth]{chap05_example1.png}
-    \caption{文件解析与二维可视化示例图}
-    \label{fig:chap05_example1}
+    \subfloat[打开文件]{
+        \includegraphics[width=0.49\textwidth]{chap05_example01_open.png}
+        \label{fig:chap05_example01_open}
+    }
+    \subfloat[膝部动态骨显像可视化]{
+        \includegraphics[width=0.49\textwidth]{chap05_example02_vis.png}
+        \label{fig:chap05_example02_vis}
+    }
+    \newline
+    \newline
+    \subfloat[髋部动态骨显像可视化]{
+        \includegraphics[width=0.49\textwidth]{chap05_example03_vis.png}
+        \label{fig:chap05_example03_vis}
+    }
+    \subfloat[下肢PET/CT融合可视化]{
+        \includegraphics[width=0.49\textwidth]{chap05_example04_vis.png}
+        \label{fig:chap05_example04_vis}
+    }
+    \caption{可视化方法}\label{fig:chap05_example_vis}
 \end{figure}
 
-如图\ref{fig:chap05_example1}展现的所示，用户通过在侧边导航栏中点击"打开文件"按钮，便可以选择所需进行解析的文件。随后，文件解析模块负责读取并解析患者A、患者B和患者C的DICOM格式的影像文件。影像文件的解析结果以三个独立且可折叠的列表按钮在侧边导航栏中显示。这些列表展示了患者的姓名拼音与影像扫描的具体时间，并且在其内部详细地展示了归属于当前研究组的影像数据，例如系列描述与影像尺寸信息。当用户点击某个可折叠列表的列表信息处，相应的影像数据会被暂时隐藏起来；而在用户再一次点击的时候，这些被隐藏的影像数据则会重新显示出来。
+如图\ref{fig:chap05_example01_open}所示，通过在侧边导航栏顶部的“打开文件”功能按钮，可以在启动的文件选择窗口中依次打开患者A、患者B和患者C的DICOM医学影像文件，影像文件被打开并成功解析后，结果在侧边导航栏中清晰地展示了出来。
 
-\begin{figure}[t]
-    \centering
-    \subfloat{\includegraphics[width=0.475\textwidth]{chap05_example2.png}}
-    \hfill
-    \subfloat{\includegraphics[width=0.475\textwidth]{chap05_example3.png}}
-    \caption{可视化与影像分析示例图}
-    \label{fig:chap05_example2}
-\end{figure}
-
-用户在点击研究组内的影像信息后，将触发影像信息前面的复选框修改其选中状态。紧接着，通过点击侧边导航栏顶部的可视化功能按钮，选中的影像信息将得到相应的可视化处理。图\ref{fig:chap05_example1}和图\ref{fig:chap05_example2}依次描绘了患者A膝部的动态骨显像、患者B髋部的动态骨显像和患者C的立体PET/CT影像。
-
-通过使用影像分析模块的多样化功能，例如切换切片、调节影像对比度以及定位蓝色十字光标到特定区域，用户能够获取更加细致和精确的影像详情。影像分析模块设计的交互提供了全面的影像探索能力，进一步允许用户对所展示的影像内容进行深入的分析，比如精确定位病灶、查看病变和周围组织结构的形态，为后续的深度分析和治疗决策提供支持。
+如图\ref{fig:chap05_example02_vis}所示，通过选中患者A的动态骨显像并点击“二维影像展示”按钮，从而呈现了患者A膝部的二维可视化影像。图\ref{fig:chap05_example03_vis}则展现了类似操作过程，勾选患者B的动态骨显像并点击相同的功能按钮，实现了髋部影像的二维可视化。随后，使用可视化区域顶部的影像分析工具。通过调整影像的对比度，以获得更清晰细致的可视化效果。在此基础上，灵活地切换不同的切片，搜索并定位到最合适的影像切片。最后，移动蓝色十字光标至特定区域，以查看相应的影像值，为进一步的分析和评估提供关键信息。
 
 \begin{figure}[b]
     \centering
-    \subfloat{\includegraphics[width=0.475\textwidth]{chap05_result1.png}}
-    \hfill
-    \subfloat{\includegraphics[width=0.475\textwidth]{chap05_result2.png}}
+    \subfloat[膝部动态骨显像自动诊断]{
+        \includegraphics[width=0.475\textwidth]{chap05_example_result1.png}
+        \label{fig:chap05_example_result1}
+    }
+    \subfloat[髋部动态骨显像自动诊断]{
+        \includegraphics[width=0.475\textwidth]{chap05_example_result2.png}
+        \label{fig:chap05_example_result2}
+    }
     \newline
-    \subfloat{\includegraphics[width=0.475\textwidth]{chap05_result3.png}}
-    \hfill
-    \subfloat{\includegraphics[width=0.475\textwidth]{chap05_result4.png}}
-    \caption{辅助诊断示例图}\label{fig:chap05_result}
+    \newline
+    \subfloat[下肢PET/CT自动诊断]{
+        \includegraphics[width=0.475\textwidth]{chap05_example_result3.png}
+        \label{fig:chap05_example_result3}
+    }
+    \subfloat[PET/CT检测到的感染病灶]{
+        \includegraphics[width=0.475\textwidth]{chap05_example_result4.png}
+        \label{fig:chap05_example_result4}
+    }
+    \caption{自动诊断方法}
+    \label{fig:chap05_example_diagnose}
 \end{figure}
 
-用户可通过在可视化界面顶部工具栏点击AI图标，激活辅助诊断模块中的自动化诊断功能。根据接下来可能会出现的提示进行操作，用户会获得辅助诊断建议，如图\ref{fig:chap05_result}所示。患者A的膝关节假体诊断提示存在感染。在患者B的案例中，髋关节假体的诊断同样表明感染，并展现了选定的感兴趣区域。至于患者C，识别出了一个感染区与一个膀胱区，这两个区域均通过三维边界框形式视觉呈现。这些诊断建议与真实的专业医生做出的诊断一致。这些自动化诊断功能借助先进的深度学习技术，分析医学影像数据，并提供潜在的诊断建议，从而支持医疗专业人员做出更精确的临床决策。此外，用户在三维融合展示中可通过视图按钮来全方位查看深度学习方法识别的病灶。
+
+通过可视化区域顶部工具栏最右侧的AI功能按钮，可以激活辅助诊断模块的自动诊断功能，并获得基于深度学习方法生成的辅助诊断建议。图\ref{fig:chap05_example_result1}所展示的是患者A的案例，辅助诊断结果建议患者存在假体关节感染的情况。同时，图\ref{fig:chap05_example_result2}中以透明红色矩形标识了患者B髋部中的感兴趣区域，并表明了患者B存在假体关节感染的诊断建议。
+
+图\ref{fig:chap05_example04_vis}展现了患者C的PET和CT影像数据通过选中并点击“三维影像融合”按钮后，得到的下肢立体融合影像的可视化图。此后，利用影像分析工具可以对该立体影像进行缩放和旋转操作，以便对特定感兴趣的区域进行详细的观察和分析。点击AI辅助诊断按钮后，如图\ref{fig:chap05_example_result3}所呈现的，患者C被智能辅助诊断为存在一个感染区域，并且该区域在患者C的右股骨处被一个青色立体框所标记。最后借助于视图按钮，还能够从不同角度观察并分析感染区域的影像数据，如图\ref{fig:chap05_example_result4}所示。
+
+通过对三个具体病例的详细展示和分析，提供的辅助诊断建议与经验丰富的医生所作出的诊断高度一致。这表明本章所介绍的自动诊断与可视化方法，不仅赋予了医生一个实用的影像分析工具，还可以通过整合先进的深度学习技术提出极具参考价值的辅助诊断建议。
 
 \section{本章小结}
 

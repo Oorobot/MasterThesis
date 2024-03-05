@@ -17,18 +17,18 @@
 \section{总体设计}
 
 \begin{figure}[h]
-    \centering
-    \includegraphics[width=\textwidth]{figures/chap05_overall.png}
-    \caption{骨科相关感染的自动诊断与可视化方法的总体设计图}
-    \label{fig:chap05_overall}
+  \centering
+  \includegraphics[width=\textwidth]{figures/chap05_overall.jpg}
+  \caption{骨科相关感染的自动诊断与可视化方法的总体设计图}
+  \label{fig:chap05_overall}
 \end{figure}
 
 本章设计了一个基于深度学习和PyQt6框架的骨科相关感染自动诊断和可视化方法，旨在提供精确地诊断辅助。如图\ref{fig:chap05_overall}所示的方法流程涵盖了四个关键模块和相应的操作流程。整个方法流程由四个主要步骤构成：
 \begin{enumerate}
-    \item \textbf{文件解析}：被用户选定的DICOM或NIfTI格式文件经过读取和解析，其中根据各自的文件规范执行相应的解码流程，旨在准确抽取所需的医学信息数据。
-    \item \textbf{可视化}：经过解析得到的数据在预处理后转化为视觉表现形式，以直观展示医学影像。该预处理包括标准化、配准和融合，以提供丰富且细致的视觉信息。
-    \item \textbf{影像分析}：在实现影像数据的视觉呈现后，影像分析步骤提供了一系列工具，用于在多个视角和尺度下观察医学影像，包括视图切换、仿射变换等等操作。
-    \item \textbf{辅助诊断}：在用户通过可视化和影像分析获得初步印象后，辅助诊断步骤通过第三章和第四章中描述的深度学习模型，为假体关节感染和骨折相关感染提供辅助诊断能力。
+  \item \textbf{文件解析}：被用户选定的DICOM或NIfTI格式文件经过读取和解析，其中根据各自的文件规范执行相应的解码流程，旨在准确抽取所需的医学信息数据。
+  \item \textbf{可视化}：经过解析得到的数据在预处理后转化为视觉表现形式，以直观展示医学影像。该预处理包括标准化、配准和融合，以提供丰富且细致的视觉信息。
+  \item \textbf{影像分析}：在实现影像数据的视觉呈现后，影像分析步骤提供了一系列工具，用于在多个视角和尺度下观察医学影像，包括视图切换、仿射变换等等操作。
+  \item \textbf{辅助诊断}：在用户通过可视化和影像分析获得初步印象后，辅助诊断步骤通过第三章和第四章中描述的深度学习模型，为假体关节感染和骨折相关感染提供辅助诊断能力。
 \end{enumerate}
 
 从最初的文件解析模块开始，对DICOM和NIfTI格式的医学影像数据进行读取与解析。DICOM数据由于其独有的详细性和医疗信息的丰富性，需要处理其复杂的元数据以提取诊断所需的重要数据；而NIfTI格式则常用于功能成像和三维影像处理，因此其解析旨在获取空间结构信息以便后续分析。
@@ -42,10 +42,10 @@
 \subsection{界面设计}
 
 \begin{figure}[htbp]
-    \centering
-    \includegraphics[width=\textwidth]{figures/chap05_preview.png}
-    \caption{骨科相关感染的自动辅助诊断系统界面}
-    \label{fig:chap05_preview}
+  \centering
+  \includegraphics[width=\textwidth]{figures/chap05_preview.jpg}
+  \caption{骨科相关感染的自动辅助诊断系统界面}
+  \label{fig:chap05_preview}
 \end{figure}
 
 图\ref{fig:chap05_preview}呈现的是所设计的骨科相关感染自动化辅助诊断系统的界面。界面主要分为侧边导航栏和中心的可视化显示区域。在侧边导航栏中，展示了DICOM和NIfTI文件由文件解析模块处理所得的层次化结构信息。该信息采用了可折叠的列表按钮的形式，详细地列出了患者的姓名拼音与影像扫描的具体时间，并在其内部展示了归属于当前患者的影像数据，例如系列描述与影像尺寸信息。用户可以通过点击列表按钮来显示或隐藏对应的影像数据。侧边栏顶部设置了多个功能按钮，包括打开文件、删除已解析的影像数据、二维影像展示、三维影像展示、二维影像融合以及三维影像融合。
@@ -55,27 +55,27 @@
 中央的可视化显示区域将依据操作者在侧边导航栏中执行的操作，以标签页的形式对医学影像数据进行可视化显示。图\ref{fig:chap05_view}展示了四种不同可视化功能下每个标签页顶部配备的工具栏，其中融合了影像分析模块与辅助诊断模块的众多功能。
 
 \begin{figure}[htbp]
-    \centering
-    \subfloat[二维展示]{
-        \includegraphics[width=0.49\textwidth]{figures/chap05_view_2D.png}
-        \label{fig:chap05_view_2D}
-    }
-    \subfloat[二维融合]{
-        \includegraphics[width=0.49\linewidth]{figures/chap05_view_2DF.png}
-        \label{fig:chap05_view_2DF}
-    }
-    \newline
-    \newline
-    \subfloat[三维展示]{
-        \includegraphics[width=0.49\linewidth]{figures/chap05_view_3D.png}
-        \label{fig:chap05_view_3D}
-    }
-    \subfloat[三维融合]{
-        \includegraphics[width=0.49\linewidth]{figures/chap05_view_3DF.png}
-        \label{fig:chap05_view_3DF}
-    }
-    \newline
-    \caption{可视化区域示意图}\label{fig:chap05_view}
+  \centering
+  \subfloat[二维展示]{
+    \includegraphics[width=0.49\textwidth]{figures/chap05_view_2D.jpg}
+    \label{fig:chap05_view_2D}
+  }
+  \subfloat[二维融合]{
+    \includegraphics[width=0.49\linewidth]{figures/chap05_view_2DF.jpg}
+    \label{fig:chap05_view_2DF}
+  }
+  \newline
+  \newline
+  \subfloat[三维展示]{
+    \includegraphics[width=0.49\linewidth]{figures/chap05_view_3D.jpg}
+    \label{fig:chap05_view_3D}
+  }
+  \subfloat[三维融合]{
+    \includegraphics[width=0.49\linewidth]{figures/chap05_view_3DF.jpg}
+    \label{fig:chap05_view_3DF}
+  }
+  \newline
+  \caption{可视化区域示意图}\label{fig:chap05_view}
 \end{figure}
 
 在影像的二维可视化中，工具栏前端不仅显示了当前视图信息，同时展示了位于可视化区域中心蓝色十字准星所指示的像素位置坐标及其相关的影像值，这些信息用于评估和分析至关重要。值得说明的是，坐标可以进行修改，可视化区域也会随之进行更新。工具栏包含了多种功能按钮：视图按钮用于变换不同的视角；操作按钮允许用户复原图像、执行旋转及进行镜像翻转；鼠标左键图标按钮则使用户能够通过鼠标左键拖拽影像或移动蓝色虚线十字准星；切换按钮则可以让鼠标滑轮的功能在切换切片和缩放之间进行转换；对比度按钮则用以调整可视化影像的对比度。此外，还有导入分割图像或者边界框的标签按钮，调节标签透明度的滑块，以及用于给出辅助诊断建议的AI按钮。
@@ -92,33 +92,33 @@
 通过简单地点击AI按钮，辅助诊断模块便可迅速触发内嵌的深度学习算法，进而自动对当前可视化的医学影像数据进行分析。重要的是，辅助诊断模块会从医学影像的元数据中自动提取关键信息，例如影像模态、研究描述和系列描述，以确保算法对当前医学影像数据的适用性。算法开始对影像数据进行深入分析时，将对病灶区域进行精准的辅助诊断。对于涉及骨折相关感染的情况，辅助诊断模块会在PET/CT影像中准确地绘制出特定的边界框标注，不仅准确地定位了潜在的病灶区域，同时也提供了其相应的判定结果。
 
 \begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.9\textwidth]{figures/chap05_diagnose.png}
-    \caption{辅助诊断模块的整体运行流程}
-    \label{fig:chap05_diagnose}
+  \centering
+  \includegraphics[width=0.9\textwidth]{figures/chap05_diagnose.jpg}
+  \caption{辅助诊断模块的整体运行流程}
+  \label{fig:chap05_diagnose}
 \end{figure}
 
 图\ref{fig:chap05_diagnose}展示了辅助诊断模块的整体运行流程。在流程的初始阶段依赖于对医学影像数据的元数据进行解析，从而对所可视化的数据进行影像模态识别。当遇到集成的算法不兼容的影像模态时，辅助诊断模块会通过图\ref{fig:chap05_messagebox1}所示的信息框提示用户，流程于此终止。
 
 \begin{figure}[htbp]
-    \centering
-    \subfloat[暂不支持]{
-        \includegraphics[width=0.24\textwidth]{chap05_messagebox1.png}
-        \label{fig:chap05_messagebox1}
-    }
-    \subfloat[选择膝或髋]{
-        \includegraphics[width=0.24\textwidth]{chap05_messagebox3.png}
-        \label{fig:chap05_messagebox3}
-    }
-    \subfloat[处理中]{\includegraphics[width=0.24\textwidth]{chap05_messagebox2.png}
-        \label{fig:chap05_messagebox2}
-    }
-    \subfloat[感兴趣区域]{
-        \includegraphics[width=0.24\textwidth]{chap05_messagebox4.png}
-        \label{fig:chap05_messagebox4}
-    }
-    \label{fig:chap05_messagebox}
-    \caption{消息框}
+  \centering
+  \subfloat[暂不支持]{
+    \includegraphics[width=0.24\textwidth]{figures/chap05_messagebox1.jpg}
+    \label{fig:chap05_messagebox1}
+  }
+  \subfloat[选择膝或髋]{
+    \includegraphics[width=0.24\textwidth]{figures/chap05_messagebox3.jpg}
+    \label{fig:chap05_messagebox3}
+  }
+  \subfloat[处理中]{\includegraphics[width=0.24\textwidth]{figures/chap05_messagebox2.jpg}
+    \label{fig:chap05_messagebox2}
+  }
+  \subfloat[感兴趣区域]{
+    \includegraphics[width=0.24\textwidth]{figures/chap05_messagebox4.jpg}
+    \label{fig:chap05_messagebox4}
+  }
+  \label{fig:chap05_messagebox}
+  \caption{消息框}
 \end{figure}
 
 若影像模态确认为动态骨显像时，则会引导用户在图\ref{fig:chap05_messagebox3}所示的消息框中选择特定的区域。选定膝部后，辅助诊断模块会立即采用第三章所述的深度学习框架，执行病灶的辅助诊断，同时通过图\ref{fig:chap05_messagebox2}所示的计时弹窗进行用户提示。髋部选择路径稍有不同，流程会进入一个选择感兴趣区域的环节，如图\ref{fig:chap05_messagebox4}所示。用户通过鼠标左键按下生成一个\(40 \times 40\)的红色边框，并在可视化区域中移动到理想的区域，随后释放鼠标左键，辅助诊断模块将以鼠标位置为中心的\(40 \times40 \)的区域设置为感兴趣区域并提供给第三章的深度学习框架进一步分析和诊断。
@@ -145,16 +145,16 @@
 
 对于二维展示，为了将医学影像值有效地映射到自然图像领域中的RGB色彩空间，可视化模块采用了最大最小值归一化方法，确保医学影像值可以在保持其诊断信息的同时，以一种标准化且用户直观理解的视觉形式进行展现。其计算方式如下：
 \begin{equation}
-    v =\text{floor}(\frac{v - \min(v)}{\max(v) - \min(v)} \times 255)
-    \label{eq:chap05_min_max}
+  v =\text{floor}(\frac{v - \min(v)}{\max(v) - \min(v)} \times 255)
+  \label{eq:chap05_min_max}
 \end{equation}
 其中，\(\text{floor}(\cdot)\)表示向下取整函数，\(\max(\cdot)\)表示计算最大值的函数，\(\min(\cdot)\)表示计算最小值的函数。
 
 \begin{figure}[htbp]
-    \centering
-    \includegraphics[width=\textwidth]{figures/chap05_colormap.png}
-    \caption{三种不同的颜色映射}
-    \label{fig:chap05_colormap}
+  \centering
+  \includegraphics[width=\textwidth]{figures/chap05_colormap.jpg}
+  \caption{三种不同的颜色映射}
+  \label{fig:chap05_colormap}
 \end{figure}
 
 接下来，不同模态的影像值将采用不同的颜色映射方案，以增强影像中各区域之间的对比度和其可视性效果。其中，颜色映射（colormap）是用于将数据值映射到颜色的一种方法，在数据视觉表现中可以起到关键作用，可以使数据分布、趋势和特征以更加直观的方式得以呈现。图\ref{fig:chap05_colormap}展示了三种颜色映射：二进制（binary）是一种简单的黑白二色的颜色映射，其中较小的值映对应黑色而较大的值对应白色；灰度（gray）颜色映射通过灰阶色调展示图像或数据的亮度等级；热（hot）是一种常用于表示温度或热度的颜色映射，整体上从黑色渐变到红色、黄色最终达到白色。这些颜色映射各具特色，能有效地增强数据的视觉效果和解读性。
@@ -163,29 +163,29 @@
 
 在完成医学影像的颜色映射之后，重要的一步是考虑可视化区域的尺寸\((w,h)\)、三维医学影像在各个方向上的尺寸\((x,y,z)\)以及体素间距（Spacing\(=(s_x,s_y,s_z)\)）。这一步骤是为了保证医学影像能够完整地填充整个可视化区域，以便用户能够得到一个清晰且准确的视图。因此，在进行三维医学影像切片的可视化处理时，需要计算相应的缩放比例，以便影像切片能够适配可视化区域。相关的缩放比例计算方式如下：
 \begin{equation}
-    \begin{aligned}
-        \mathcal{S}_x^{h} & = s_y \times min(\frac{h}{z \times s_z}, \frac{w}{y \times s_y}) & \quad \mathcal{S}_x^{w} & = s_z \times min(\frac{h}{z \times s_z}, \frac{w}{y \times s_y}) \\
-        \mathcal{S}_y^{h} & = s_x \times min(\frac{h}{z \times s_z}, \frac{w}{x \times s_x}) & \quad \mathcal{S}_y^{w} & = s_z \times min(\frac{h}{z \times s_z}, \frac{w}{x \times s_x}) \\
-        \mathcal{S}_z^{h} & = s_x \times min(\frac{h}{x \times s_x}, \frac{w}{y \times s_y}) & \quad \mathcal{S}_z^{w} & = s_y \times min(\frac{h}{x \times s_x}, \frac{w}{y \times s_y}) \\
-    \end{aligned}
-    \label{eq:chap05_scale}
+  \begin{aligned}
+    \mathcal{S}_x^{h} & = s_y \times min(\frac{h}{z \times s_z}, \frac{w}{y \times s_y}) & \quad \mathcal{S}_x^{w} & = s_z \times min(\frac{h}{z \times s_z}, \frac{w}{y \times s_y}) \\
+    \mathcal{S}_y^{h} & = s_x \times min(\frac{h}{z \times s_z}, \frac{w}{x \times s_x}) & \quad \mathcal{S}_y^{w} & = s_z \times min(\frac{h}{z \times s_z}, \frac{w}{x \times s_x}) \\
+    \mathcal{S}_z^{h} & = s_x \times min(\frac{h}{x \times s_x}, \frac{w}{y \times s_y}) & \quad \mathcal{S}_z^{w} & = s_y \times min(\frac{h}{x \times s_x}, \frac{w}{y \times s_y}) \\
+  \end{aligned}
+  \label{eq:chap05_scale}
 \end{equation}
 其中，\(\mathcal{S}_\cdot^{h},\mathcal{S}_\cdot^{w}\)分别代表三维影像中，垂直于\(\cdot\)轴的切片在可视化过程中，所需应用在高度与宽度方向上的缩放比例。
 
 最终，三维医学影像的对应切片将由可视化模块根据预设的坐标及视图参数来进行展现。当进行双模态影像的融合展示时，首先是在两种不同模态的影像之间采用第四章中介绍的方法进行配准。完成配准后，依据设定的坐标和视图参数，两种模态的影像切片将被融合展示。图像融合可以采用以下加权平均的计算方式：
 \begin{equation}
-    \text{Image} = \alpha \times \text{Image}_1 + \beta \times \text{Image}_2
-    \label{eq:chap05_fusion}
+  \text{Image} = \alpha \times \text{Image}_1 + \beta \times \text{Image}_2
+  \label{eq:chap05_fusion}
 \end{equation}
 其中，\(\text{Image}_1,\text{Image}_2\)分别代表了待融合的的两幅图像，而融合系数\(\alpha, \beta\)，分别取值为0.3和0.7，用以控制融合过程中各图像的权重。
 
 对于三维展示，本章提出的方法采用了Visualization Toolkit（VTK）库来实现医学影像的三维可视化处理。首先，将医学影像数据包含的三维矩阵和体素间距以及自定义的影像原点导入到VTK中，并转换成适合VTK处理的图像格式。为了确保生成的三维影像中心位于坐标原点\((0,0,0)\)，将医学影像的原点设定为：
 \begin{equation}
-    \begin{aligned}
-        o_x & = -0.5 \times size_x \times spacing_x \\
-        o_y & = -0.5 \times size_y \times spacing_y \\
-        o_z & = -0.5 \times size_z \times spacing_z \\
-    \end{aligned}
+  \begin{aligned}
+    o_x & = -0.5 \times size_x \times spacing_x \\
+    o_y & = -0.5 \times size_y \times spacing_y \\
+    o_z & = -0.5 \times size_z \times spacing_z \\
+  \end{aligned}
 \end{equation}
 其中，\(o_x,o_y,o_z\)分别代表医学影像在三维空间中的原点坐标，\(size_x,size_y,size_z\)分别代表医学影像在各轴方向上的大小，\(spacing_x,spacing_y,spacing_z\)则为各轴方向上的体素间距。
 
@@ -193,7 +193,7 @@
 
 考虑到该体渲染技术的特性，可视化模块设定了将医学影像的影像值转换为相应颜色以及透明度的映射表，并设置了必要的光照参数，包括环境光照、漫反射光照和镜面反射光照的强度。在三维模型构建完成后，通过调整观察相机的位置和方向，可以生成完整详尽的三维视图，以供医疗专家进行深入分析和解读。具体而言，为展示完整的三维医学影像，相机的视角设定为60°，焦点设置在\((0,0,0)\)，朝上方向设置为\((0,0,1)\)，位置定位在\((0,P_y,0)\)。其中\(P_y\)的计算方式如下：
 \begin{equation}
-    P_y = -0.5 \times \max(size_x \times spacing_x, size_z \times spacing_z) \div \tanh(\pi / 6)\\
+  P_y = -0.5 \times \max(size_x \times spacing_x, size_z \times spacing_z) \div \tanh(\pi / 6)\\
 \end{equation}
 
 在双模态融合展示方面，可视化模块依据以上方法，分别对两种不同模态的医学影像进行独立的三维渲染并直接进行展示，如图\ref{fig:chap05_view_3DF}所示。
@@ -202,64 +202,64 @@
 
 在完成可视化模块的处理后，影像分析模块会给二维和三维展示的医学影像提供各种功能。如图\ref{fig:chap05_view_2D}和\ref{fig:chap05_view_2DF}所示，在二维影像分析时，包含了全部功能的工具栏位于标签页顶部。包含视图、坐标和对应影像值的信息区域与可视化区域内的影像切片及蓝色十字标记相互联动，任何一处发生变动，其他位置也会随之更新。主要的映射关系包括：
 \begin{enumerate}
-    \item \(\text{鼠标位置} \rightarrow \text{场景位置} \rightarrow \text{图像坐标}\)\label{en:chap05_1}。
-    \item \(\text{图像坐标} \rightarrow \text{场景位置}\)\label{en:chap05_2}。
+  \item \(\text{鼠标位置} \rightarrow \text{场景位置} \rightarrow \text{图像坐标}\)\label{en:chap05_1}。
+  \item \(\text{图像坐标} \rightarrow \text{场景位置}\)\label{en:chap05_2}。
 \end{enumerate}
 
 坐标信息可以直接被修改，依据映射关系\ref{en:chap05_2}更新蓝色十字的位置及相应切片。使用鼠标左键可移动蓝色十字，并依照映射关系\ref{en:chap05_1}刷新坐标和影像值信息。视图信息可以通过按键切换不同视图下的影像切片，并根据当前坐标信息来更新蓝色十字的指向位置。鼠标滚轮则通过调整当前的坐标信息来更新影像切片和蓝色十字的位置。操作按钮提供了实施旋转、镜像翻转以及图像重置的仿射变换功能。普通按钮允许用户修改鼠标左键的操作，以实施影像的平移变换，而切换按钮则改变鼠标滚轮的作用，从而实现影像的缩放变换。所有这些操作均通过应用仿射变换矩阵来完成。二维仿射变换矩阵如下所示：
 \begin{equation}
-    \left[
-        \begin{array}{ccc}
-            a & b & t_x \\
-            c & d & t_y \\
-            0 & 0 & 1   \\
-        \end{array}
-        \right]
-    \label{eq:chap05_affine_mat}
+  \left[
+    \begin{array}{ccc}
+      a & b & t_x \\
+      c & d & t_y \\
+      0 & 0 & 1   \\
+    \end{array}
+    \right]
+  \label{eq:chap05_affine_mat}
 \end{equation}
 其中，\(a\)和\(d\)表示缩放因子，\(b\)和\(c\)用于旋转变换之中，\(t_x\)和\(t_y\)表示平移量。通过调整这些参数，可以实现不同的仿射变换，如下所示：
 \begin{equation}
-    \begin{array}{ccc}
-        \text{旋转} & \text{缩放} & \text{镜像} \\
-        \left[
-            \begin{array}{ccc}
-                \cos(\theta) & -\sin(\theta) & 0 \\
-                \sin(\theta) & \cos(\theta)  & 0 \\
-                0            & 0             & 1 \\
-            \end{array}
-        \right]     &
-        \left[
-            \begin{array}{ccc}
-                s_x & 0   & 0 \\
-                0   & s_y & 0 \\
-                0   & 0   & 1 \\
-            \end{array}
-        \right]     &
-        \left[
-            \begin{array}{ccc}
-                -1 & 0 & 0 \\
-                0  & 1 & 0 \\
-                0  & 0 & 1 \\
-            \end{array}
-            \right] \quad
-        \left[
-            \begin{array}{ccc}
-                1 & 0  & 0 \\
-                0 & -1 & 0 \\
-                0 & 0  & 1 \\
-            \end{array}
-        \right]                                 \\
-    \end{array}
-    \label{eq:chap05_affine}
+  \begin{array}{ccc}
+    \text{旋转} & \text{缩放} & \text{镜像} \\
+    \left[
+      \begin{array}{ccc}
+        \cos(\theta) & -\sin(\theta) & 0 \\
+        \sin(\theta) & \cos(\theta)  & 0 \\
+        0            & 0             & 1 \\
+      \end{array}
+    \right]     &
+    \left[
+      \begin{array}{ccc}
+        s_x & 0   & 0 \\
+        0   & s_y & 0 \\
+        0   & 0   & 1 \\
+      \end{array}
+    \right]     &
+    \left[
+      \begin{array}{ccc}
+        -1 & 0 & 0 \\
+        0  & 1 & 0 \\
+        0  & 0 & 1 \\
+      \end{array}
+      \right] \quad
+    \left[
+      \begin{array}{ccc}
+        1 & 0  & 0 \\
+        0 & -1 & 0 \\
+        0 & 0  & 1 \\
+      \end{array}
+    \right]                                 \\
+  \end{array}
+  \label{eq:chap05_affine}
 \end{equation}
 通过对比度按钮可以调节视图中医学影像的对比度，这是通过在弹出的窗口中输入窗位\(w_c\)和窗框\(w_w\)，或者最大值\(ma\)和最小值\(mi\)来实现的。具体而言，对医学影像值\(v\)的计算如下所示：
 \begin{equation}
-    \begin{aligned}
-        ma & = w_c + 0.5 \times w_w                       \\
-        mi & = w_c - 0.5 \times w_w                       \\
-        v  & = \frac{\min(\max(mi, v), ma) - mi}{ma - mi} \\
-    \end{aligned}
-    \label{eq:chap05_constrast}
+  \begin{aligned}
+    ma & = w_c + 0.5 \times w_w                       \\
+    mi & = w_c - 0.5 \times w_w                       \\
+    v  & = \frac{\min(\max(mi, v), ma) - mi}{ma - mi} \\
+  \end{aligned}
+  \label{eq:chap05_constrast}
 \end{equation}
 标签按钮可用来导入NIfTI格式的标签数据，以渲染分割图或显示边界框；标签滑块则可调整标签图的透明度。
 
@@ -276,26 +276,26 @@
 （3）患者C在右股骨骨折治疗后，于2016年11月在上海市第六人民医院核医学科接受PET/CT扫描。医生经过影像学判断，疑似感染性病灶存在。借助微生物培养、病理分析及临床综合判断，确认患者存在骨折相关感染。
 
 \begin{figure}[htbp]
-    \centering
-    \subfloat[打开文件]{
-        \includegraphics[width=0.49\textwidth]{chap05_example01_open.png}
-        \label{fig:chap05_example01_open}
-    }
-    \subfloat[膝部动态骨显像可视化]{
-        \includegraphics[width=0.49\textwidth]{chap05_example02_vis.png}
-        \label{fig:chap05_example02_vis}
-    }
-    \newline
-    \newline
-    \subfloat[髋部动态骨显像可视化]{
-        \includegraphics[width=0.49\textwidth]{chap05_example03_vis.png}
-        \label{fig:chap05_example03_vis}
-    }
-    \subfloat[下肢PET/CT融合可视化]{
-        \includegraphics[width=0.49\textwidth]{chap05_example04_vis.png}
-        \label{fig:chap05_example04_vis}
-    }
-    \caption{可视化方法}\label{fig:chap05_example_vis}
+  \centering
+  \subfloat[打开文件]{
+    \includegraphics[width=0.49\textwidth]{figures/chap05_example01_open.jpg}
+    \label{fig:chap05_example01_open}
+  }
+  \subfloat[膝部动态骨显像可视化]{
+    \includegraphics[width=0.49\textwidth]{figures/chap05_example02_vis.jpg}
+    \label{fig:chap05_example02_vis}
+  }
+  \newline
+  \newline
+  \subfloat[髋部动态骨显像可视化]{
+    \includegraphics[width=0.49\textwidth]{figures/chap05_example03_vis.jpg}
+    \label{fig:chap05_example03_vis}
+  }
+  \subfloat[下肢PET/CT融合可视化]{
+    \includegraphics[width=0.49\textwidth]{figures/chap05_example04_vis.jpg}
+    \label{fig:chap05_example04_vis}
+  }
+  \caption{可视化方法}\label{fig:chap05_example_vis}
 \end{figure}
 
 如图\ref{fig:chap05_example01_open}所示，通过在侧边导航栏顶部的“打开文件”功能按钮，可以在启动的文件选择窗口中依次打开患者A、患者B和患者C的DICOM医学影像文件，影像文件被打开并成功解析后，结果在侧边导航栏中清晰地展示了出来。
@@ -303,27 +303,27 @@
 如图\ref{fig:chap05_example02_vis}所示，通过选中患者A的动态骨显像并点击“二维影像展示”按钮，从而呈现了患者A膝部的二维可视化影像。图\ref{fig:chap05_example03_vis}则展现了类似操作过程，勾选患者B的动态骨显像并点击相同的功能按钮，实现了髋部影像的二维可视化。随后，使用可视化区域顶部的影像分析工具。通过调整影像的对比度，以获得更清晰细致的可视化效果。在此基础上，灵活地切换不同的切片，搜索并定位到最合适的影像切片。最后，移动蓝色十字光标至特定区域，以查看相应的影像值，为进一步的分析和评估提供关键信息。
 
 \begin{figure}[b]
-    \centering
-    \subfloat[膝部动态骨显像自动诊断]{
-        \includegraphics[width=0.475\textwidth]{chap05_example_result1.png}
-        \label{fig:chap05_example_result1}
-    }
-    \subfloat[髋部动态骨显像自动诊断]{
-        \includegraphics[width=0.475\textwidth]{chap05_example_result2.png}
-        \label{fig:chap05_example_result2}
-    }
-    \newline
-    \newline
-    \subfloat[下肢PET/CT自动诊断]{
-        \includegraphics[width=0.475\textwidth]{chap05_example_result3.png}
-        \label{fig:chap05_example_result3}
-    }
-    \subfloat[PET/CT检测到的感染病灶]{
-        \includegraphics[width=0.475\textwidth]{chap05_example_result4.png}
-        \label{fig:chap05_example_result4}
-    }
-    \caption{自动诊断方法}
-    \label{fig:chap05_example_diagnose}
+  \centering
+  \subfloat[膝部动态骨显像自动诊断]{
+    \includegraphics[width=0.475\textwidth]{figures/chap05_example_result1.jpg}
+    \label{fig:chap05_example_result1}
+  }
+  \subfloat[髋部动态骨显像自动诊断]{
+    \includegraphics[width=0.475\textwidth]{figures/chap05_example_result2.jpg}
+    \label{fig:chap05_example_result2}
+  }
+  \newline
+  \newline
+  \subfloat[下肢PET/CT自动诊断]{
+    \includegraphics[width=0.475\textwidth]{figures/chap05_example_result3.jpg}
+    \label{fig:chap05_example_result3}
+  }
+  \subfloat[PET/CT检测到的感染病灶]{
+    \includegraphics[width=0.475\textwidth]{figures/chap05_example_result4.jpg}
+    \label{fig:chap05_example_result4}
+  }
+  \caption{自动诊断方法}
+  \label{fig:chap05_example_diagnose}
 \end{figure}
 
 

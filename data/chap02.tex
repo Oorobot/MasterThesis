@@ -18,16 +18,16 @@
 常见的机器学习模型有K-近邻算法，决策树、支持向量机等等。K-近邻算法（K-Nearest Neighbor，KNN）\cite{guo2003knn}基于一个简单的假设：相似的样本具有相似的标签。该算法通过计算样本之间的距离来代表样本之间的相似性，在训练数据集中根据每个未知样本最相似的K个邻居来对该未知样本进行分类。该算法简单直观易于理解，但计算和内存的开销大且对不平衡数据集不友好。决策树\cite{suthaharan2016decision}的基本思想是通过一系列的对某一特征值的条件筛选来对数据进行划分，直至划分到叶子结点得到最终的预测结果。该算法易于理解和解释，具有可视性，但容易过拟合和达到局部最优解。支持向量机（Support Vector Machine，SVM）\cite{suthaharan2016support}的基本思想是寻找一个可以将不同类别样本隔开的超平面，并且最大化样本与超平面之间的最小距离。该算法具有较强的泛化能力和对噪声的鲁棒性，但仅适用于二分类问题，且计算和内存的开销大。
 
 \begin{figure}[h]
-    \centering
-    \includegraphics[width=\textwidth]{figures/chap02_cnn.png}
-    \caption{卷积神经网络示意图}
-    \label{fig:chap02_cnn}
+  \centering
+  \includegraphics[width=\textwidth]{figures/chap02_cnn.jpg}
+  \caption{卷积神经网络示意图}
+  \label{fig:chap02_cnn}
 \end{figure}
 
 如今，深度学习方法逐渐成为主流，逐步取代了传统机器学习方法的地位。CNN是深度学习方法中具有代表性的方法之一，通常由卷积层，下采样层，全连接层组成，如图\ref{fig:chap02_cnn}所示。卷积层是核心组成部分，最大的特点在于参数共享机制，即通过相同的参数提取输入数据中不同位置的同一特征。参数共享机制可以大大减少参数的数量，提高模型的泛化能力。卷积层中若干个卷积核都具有可学习的参数，而该参数通过梯度反向传播算法进行训练调整。对于输入到卷积层的二维矩阵数据\(I\)而言，输出的像素点\(O_{i,j}\)可由公式\ref{eq:chap02_convolution}表示：
 \begin{equation}
-    O_{i,j} = \sum_{m=0}^{M-1}\sum_{n=0}^{N-1}I_{i+m, j+n}\times K_{m,n}
-    \label{eq:chap02_convolution}
+  O_{i,j} = \sum_{m=0}^{M-1}\sum_{n=0}^{N-1}I_{i+m, j+n}\times K_{m,n}
+  \label{eq:chap02_convolution}
 \end{equation}
 其中，\(i,\ j\)表示输出矩阵的位置，\(M,N\)是二维卷积的尺寸大小，\(K_{m,n}\)表示卷积核中的权重值。其中，输出图像\(O\)每个位置的值，由卷积核\(K\)会沿着二维矩阵数据\(I\)进行窗口滑动依次计算得出。
 
@@ -38,10 +38,10 @@ AlexNet\cite{krizhevsky2012imagenet}（2012）可以视为第一个现代深度C
 VGG\cite{Simonyan2014VeryDC}（2014）的网络结构简单而有效。与AlexNet相比较，它的卷积核更小，都是\(3\times3\)的大小。这不仅可以减少模型参数量，还增加了模型的非线性能力。此外，VGG的网络结构可以更深，通常为16或19层，这使得网络可以捕获更好的复杂特征。VGG在图像分类任务上取得了很大的成功，其清晰的网络结构和易于理解的设计使得它成为了深度学习入门的经典模型之一。
 
 \begin{figure}[ht]
-    \centering
-    \includegraphics[width=\textwidth]{figures/chap02_block.png}
-    \caption{不同卷积神经网络的模块示意图}
-    \label{fig:chap02_block}
+  \centering
+  \includegraphics[width=\textwidth]{figures/chap02_block.jpg}
+  \caption{不同卷积神经网络的模块示意图}
+  \label{fig:chap02_block}
 \end{figure}
 
 GoogleNet\cite{szegedy2015going}（2014），也称为Inception网络，初次引入了基础模块（Inception模块，图\ref{fig:chap02_block}）的概念，用以搭建一个稀疏且高性能的神经网络模型。Inception模块采用高度并行的设计方式，在多个不同尺度上同时执行卷积和池化操作，以捕获不同层次的特征。它将不同大小的卷积核和池化核组合在一起，让神经网络模型自主学习最合适的特征提取方式。尽管GoogleNet的网络结构为22层，但它的参数量是AlexNet的1/15，同时是VGG的1/3。因此，GoogleNet是在计算资源有限的情况下的一个较好选择。此外，GoogleNet使用全局平均池化层替代了全连接层来整合特征，将每个特征图转换为一个单独的特征值，在大大减少参数量的同时降低了过拟合的风险。
@@ -53,10 +53,10 @@ DenseNet\cite{huang2017densely}（2017）在ResNet的基础上更进一步，充
 ConvNeXt\cite{liu2022convnet}（2022）从ResNet模型出发，在Swin Transformer\cite{liu2021swin}的设计启发中汲取精华，在网络结构和训练策略上进行了多项改进，得到了性能超越Swin Transformer的CNN。ConvNeXt的基础模块如图\ref{fig:chap02_block}所示。由于Swin Transformer采用较大的自注意力窗口，自注意力中中间隐藏层的特征图通道数更大并且深度可分离卷积与注意力机制的计算具有相似性，ConvNeXt模块采用了倒置瓶颈结构，即中间大、两头小，并使用了大卷积核（\(7\times7\)）的深度可分离卷积。此外，在细节优化上，将激活函数ReLu改为了GELU，归一化函数Batch Normalization\cite{ioffe2015batch}改成了Layer Normalization。ConvNeXt表明了纯粹的CNN经过精心设计，依然可以与以Transformer为代表的新兴模型展开竞争。
 
 \begin{figure}[htbp]
-    \centering
-    \includegraphics[width=\textwidth]{chap02_vit.png}
-    \caption{Vision Transformer}
-    \label{fig:chap02_vit}
+  \centering
+  \includegraphics[width=\textwidth]{figures/chap02_vit.jpg}
+  \caption{Vision Transformer}
+  \label{fig:chap02_vit}
 \end{figure}
 
 相比较于CNN，最初为自然语言处理（NLP）任务设计的Transformer具有一些独特优势。即其自注意力机制在应用于图像时能够全面覆盖整个图像区域并聚焦于高度相关的特定区域。Dosovitskiy等人\cite{dosovitskiy2020image}于2020年的开创性研究引入了Vision Transformer（ViT），这是将Transformer模型成功应用于图像领域的首例，如图\ref{fig:chap02_vit}所示。ViT通过将图片分割成若干固定大小的小块（patches），并为每个小块赋予位置编码后构成序列输入到Transformer网络中。该模型通过捕捉图像中全局和局部的信息，来实现对图像特征的学习与分类。
@@ -68,18 +68,18 @@ Transformer iN Transformer\cite{han2021transformer}（TNT，2021）是另一种�
 综上所述，CNN和新兴的Transformer都是计算机视觉领域中的强大工具，它们在特征提取和模式识别方面展现出杰出的优势。对于CNN而言，其卷积层具有固定且较小的感受野，这使其能够有效地识别局部特征，如边缘、形状和纹理等，但可以通过多层堆叠以捕捉全局上下文信息。而Transformer通过自注意力机制可以捕捉到全局上下文信息，从而实现对整张图像的理解。然而，Transformer模型的训练需要依赖大量数据，而数据集小是医学影像领域普遍面临的问题。因此，CNN成为了更值得探索的方法。\textbf{对于动态骨显像和PET/CT诊断分类任务而言，CNN可以有效地学习到病灶区域中局部关键性特征，例如生理摄取的形态和解剖结构的细节。然而，对于具有时序性特点的动态骨显像，由于CNN并非专门为处理序列数据而设计，其在这方面的能力是受限的。}
 
 \begin{figure}[htbp]
-    \centering
-    \includegraphics[width=\textwidth]{figures/chap02_rnn.png}
-    \caption{循环神经网络示意图}
-    \label{fig:chap02_rnn}
+  \centering
+  \includegraphics[width=\textwidth]{figures/chap02_rnn.jpg}
+  \caption{循环神经网络示意图}
+  \label{fig:chap02_rnn}
 \end{figure}
 
 对比CNN，RNN作为深度学习方法之一，是一种专门用于处理序列数据的神经网络模型，非常适用于时间序列分析任务之中。RNN的主要原理在于它通过不断地更新隐藏状态（hidden state）去保存序列中每个时间点上一定的历史信息，并用于当前时间点的决策或下一时间点的预测，如图\ref{fig:chap02_rnn}。RNN的结构可以是序列到序列的形式，但当RNN应用于时间序列分析中的分类任务时，其结构可以变成序列到单一输出的形式。对于输入的序列数据\(X = \{x_1, \cdots, x_t, \cdots, x_T\}\)而言，在每个时间点\(t\)上，RNN通过以下公式更新隐藏状态\(h\)：
 \begin{equation}
-    \begin{aligned}
-        h_t & = \text{tanh}(W_{h}h_{t-1}+ W_{i}x_t) \\
-        y^t & = \sigma_s(W_{h}h_{t-1})              \\
-    \end{aligned}
+  \begin{aligned}
+    h_t & = \text{tanh}(W_{h}h_{t-1}+ W_{i}x_t) \\
+    y^t & = \sigma_s(W_{h}h_{t-1})              \\
+  \end{aligned}
 \end{equation}
 其中，tanh表示双曲正切函数，\(W_h\)和\(W_i\)分别表示上一隐藏状态到当前隐藏状态的权重和当前输入到当前隐藏状态的权重，\(\sigma_s\)表示Softmax函数，用于计算所属不同类别的概率分布，\(y^T\)表示RNN中的单一输出。
 
@@ -105,10 +105,10 @@ Liu等人\cite{liu2022diagnosis}（2022）提出一种创新性多尺度CNN来�
 Takahashi等人\cite{takahashi2022deep}（2022）探索了一种创新的图像预处理方式，即采用了多角度的最大强度投影（Maximum Intensity Projection，MIP），如图\ref{fig:chap02_mip}所示。他们将MIP预处理后的三维PET影像输入至深度学习模型中进行训练，使其能够识别乳腺癌的标志性特征。在随后的性能评估中，该模型展现出了超越没有经验的放射科医生的诊断能力，与三名专业放射科医生相当的诊断能力。
 
 \begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.8\textwidth]{chap02_mip.png}
-    \caption{最大强度投影四个角度的图像输入到卷积神经网络进行预测的示意图}
-    \label{fig:chap02_mip}
+  \centering
+  \includegraphics[width=0.8\textwidth]{figures/chap02_mip.jpg}
+  \caption{最大强度投影四个角度的图像输入到卷积神经网络进行预测的示意图}
+  \label{fig:chap02_mip}
 \end{figure}
 
 \textbf{综上所述，对于动态骨显像中假体关节感染任务，以上研究存在一些可借鉴之处。}例如，将时序性图像的固有三维性质，直接采用三维CNN进行特征提取似乎是一种直观的策略。然而，传统的CNN在捕捉长期时序依赖方面存在局限性。\textbf{由此，结合使用CNN和RNN，以便在时间序列的内部和之间提取综合特征，对于该特定医学任务来说可能更加精准和适宜。}同时，也应该重视任务的特定难点，比如无关区域干扰和生理状态下高摄取区域可能对分类精度造成的负面影响。\textbf{鉴于此，研究并设计针对动态骨显像的数据预处理方法，去有效减少负面影响，进一步优化深度学习模型的性能，是提高诊断精准度的关键。}
@@ -128,10 +128,10 @@ Takahashi等人\cite{takahashi2022deep}（2022）探索了一种创新的图像�
 在执行检测任务的深度学习模型分类上，一般可划分为目标分割模型与目标检测模型两大类。目标分割模型，以U-Net\cite{ronneberger2015u}为代表，旨在实现对图像中每个像素所述类别的详尽识别，从而获取精确的目标形状与位置。这类模型在医学影像中尤为重要，因为它允许细致划分病灶区域，为后续的量化分析提供了基础。相对地，目标检测模型，如区域卷积神经网络（Region with CNN features，R-CNN）\cite{girshick2014rich}和YOLO（You Only Look Once）\cite{redmon2016you}，往往通过预测边界框来定位目标对象，提供了一种相对较快且效率更高的检测方法，尽管其定位的精细度相对较低。无论是哪种类型的模型，其设计和优化都在不断地促进医学影像分析与计算机视觉领域的研究进展，继而改善临床诊断与治疗的质量。
 
 \begin{figure}[htbp]
-    \centering
-    \includegraphics[width=\textwidth]{figures/chap02_unet.png}
-    \caption{U-Net整体结构示意图}
-    \label{fig:chap02_unet}
+  \centering
+  \includegraphics[width=\textwidth]{figures/chap02_unet.jpg}
+  \caption{U-Net整体结构示意图}
+  \label{fig:chap02_unet}
 \end{figure}
 
 在目标分割模型中，U-Net\cite{ronneberger2015u}（2015）的提出开辟了医学影像分割任务的新纪元。它是一种专为医学图像分割设计的深度学习模型结构，摒弃了之前模型对大量数据依赖的限制，使得在较少标注样本的情景下仍能实现高效能的模型训练。在结构上，如图\ref{fig:chap02_unet}所示，整体呈现为一种“U”字形的对称结构，包括下采样（收缩路径）和上采样（扩展路径）两个部分，从而能够捕获上下文中多尺度的语义信息。下采样阶段逐步提取特征并降低数据维度大小；上采样阶段逐步恢复数据维度大小并进行特征解码；同时，通过跳跃连接将下采样阶段的语义信息与上采样阶段的位置信息相结合，以增强特征并实现精确的定位。
@@ -149,10 +149,10 @@ TransUNet\cite{chen2021transunet}（2021）是一种结合了卷积强大的局�
 在目标检测模型中，深度学习方法主要分为两大类：二阶段（two-stage）检测器和一阶段（one-stage）检测器。
 
 \begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.8\textwidth]{figures/chap02_rcnn.png}
-    \caption{R-CNN整体结构示意图}
-    \label{fig:chap02_rcnn}
+  \centering
+  \includegraphics[width=0.8\textwidth]{figures/chap02_rcnn.jpg}
+  \caption{R-CNN整体结构示意图}
+  \label{fig:chap02_rcnn}
 \end{figure}
 
 二阶段检测器的工作流程分为两个阶段：1.生成目标的候选区域；2. 提取这些区域的特征进行分类和边界框的精调。在具有里程碑式的二阶段检测器中，R-CNN\cite{girshick2014rich}（2014）是第一个开创性的二阶段检测器，整体结构如图\ref{fig:chap02_rcnn}所示。在R-CNN模型中，首先由选择性搜索（Selective Search）算法依据图像特征如颜色、纹理、形状等，负责挑选出潜在含有目标对象的候选区域。随后，对这些区域进行标准化预处理，并通过预训练的CNN提取特征。最终，由分类器对特征区域进行分类，并通过边界框回归器精确调整目标对象的位置，以提升目标检测的准确性。虽然R-CNN在其推出时对目标检测领域产生了巨大的影响，但它也存在一些缺点，例如速度慢、训练需要对不同部分分阶段进行，存储需求高。为了克服这些缺陷，后续基于R-CNN的改进模型，如Fast R-CNN\cite{girshick2015fast}和Faster R-CNN\cite{ren2015faster}，被提出。
@@ -164,10 +164,10 @@ Faster R-CNN\cite{ren2015faster}（2015）在Fast R-CNN的基础上创新地引�
 一阶段检测器，相比较于二阶段检测器，跳过了候选区域的生成阶段，直接对图像中的目标进行位置和类别的预测。它们通常使用全卷积网络来分析图像，使得在推理过程中能够获得更快的速度。
 
 \begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.8\textwidth]{figures/chap02_yolo.png}
-    \caption{YOLO整体结构示意图}
-    \label{fig:chap02_yolo}
+  \centering
+  \includegraphics[width=0.8\textwidth]{figures/chap02_yolo.jpg}
+  \caption{YOLO整体结构示意图}
+  \label{fig:chap02_yolo}
 \end{figure}
 
 YOLO\cite{redmon2016you}（2016）是一阶段检测器中非常流行且影响深远的一种端到端的目标检测器。其核心思想是把目标检测任务转换为一个回归问题来解决。YOLO采用一个单一的神经网络结构去全图预测，如图\ref{fig:chap02_yolo}，其结构可大致分为三个部分：用于特征提取的主干网络，用于特征融合的颈部网络和用于预测的头部网络。YOLO将输入图像划分为多个网格，每个网络预测多个目标的边界框和类别以及一个置信度。置信度反映了边界框包含目标的可能性。由于YOLO的设计简单直观和检测速度高效，它在现实世界中应用广泛，并且不断地在各个版本中得到改进，并确保在速度和准确度间取得更好的平衡。
@@ -197,10 +197,10 @@ Wang等人\cite{wang2022maff}（2022）提出了一种创新的多尺度自适�
 Huang等人\cite{huang2022isa}（2022）利用深度学习技术，提出了一种融合了PET高敏感度和CT精细解剖信息的创新性目标分割方法，如图\ref{fig:chap02_isanet}所示。此方法在编码阶段采用双模态的输入策略，并在解码阶段对不同模态信息进行特征融合，最大化地挖掘PET和CT各自的优势。这一方法可以有效地提高肿瘤分割性能。
 
 \begin{figure}[htbp]
-    \centering
-    \includegraphics[width=\textwidth]{chap02_isanet.png}
-    \caption{融合PET和CT的目标分割方法}
-    \label{fig:chap02_isanet}
+  \centering
+  \includegraphics[width=\textwidth]{figures/chap02_isanet.jpg}
+  \caption{融合PET和CT的目标分割方法}
+  \label{fig:chap02_isanet}
 \end{figure}
 
 \textbf{通过上述研究，可以明确认识到在PET/CT中定位骨折相关感染的任务需要充分利用PET与CT两种不同模态提供的信息。整合和发挥两者的独特优势至关重要。因此，探讨一个双分支网络架构是一个非常值得考虑的方向。同时，还需面对PET/CT中高摄取区域所带来的干扰问题，并采用创新性的实用方法予以解决。借鉴以往研究中有效的技术方案，并结合本研究任务的具体特性，提高定位准确性是本研究努力的核心目标。}

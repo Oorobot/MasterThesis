@@ -7,22 +7,22 @@
 
 在面对动态骨显像中的假体关节感染的诊断任务时，必须综合考虑医生对假体关节感染的诊断流程、动态骨显像的性质和辅助诊断框架的有效设计。因此，本文需要思考以下几个问题：
 
-（1）\textbf{关节置换手术后动态骨显像的公开数据集的缺乏}。本文作者与上海市第六人民医院核医学科医生收集了许多患者影像数据并进行了清洗，构建了一个由经历过髋关节置换手术或者膝关节置换手术的患者的真实动态骨显像数据集。然而，该数据集存在着数据规模较小、数据不平衡的问题，增加了人工智能诊断框架的设计要求与训练难度。
+（1）关节置换手术后动态骨显像的公开数据集的缺乏。本文作者与上海市第六人民医院核医学科医生收集了许多患者影像数据并进行了清洗，构建了一个由经历过髋关节置换手术或者膝关节置换手术的患者的真实动态骨显像数据集。然而，该数据集存在着数据规模较小、数据不平衡的问题，增加了人工智能诊断框架的设计要求与训练难度。
 
-\begin{figure}[h]
+（2）髋关节置换手术后的动态骨显像存在着生理高摄取区域。在人体的髋部附近存在着膀胱和肾脏这类自然高摄取区域，同时假体关节疼痛区域也会出现高摄取的情况，如图\ref{fig:chap03_hip}所示。这两者具有相似的图像特征，同时出现会导致神经网络在训练过程中产生混淆，无法学习到真实有用的信息，难以关注于病灶区域。
+
+\begin{figure}[ht]
   \centering
   \includegraphics{figures/chap03_hip.jpg}
-  \caption{髋关节置换手术后的动态骨显像}
+  \bicaption{髋关节置换手术后的动态骨显像}{Dynamic bone scintigraphy after hip replacement}
   \label{fig:chap03_hip}
 \end{figure}
 
-（2）\textbf{髋关节置换手术后的动态骨显像存在着生理高摄取区域}。在人体的髋部附近存在着膀胱和肾脏这类自然高摄取区域，同时假体关节疼痛区域也会出现高摄取的情况，如图\ref{fig:chap03_hip}所示。这两者具有相似的图像特征，同时出现会导致神经网络在训练过程中产生混淆，无法学习到真实有用的信息，难以关注于病灶区域。
+（3）动态骨显像本身的影像特点。动态骨显像包括三种不同条件下采集的影像，分别是在注射后立刻动态扫描（2秒/帧，20帧）用于获取灌注信息的血池相、灌注后动态扫描（1分钟/帧，5帧）可帮助诊断炎症状况或血液供应问题的血流相\cite{schauwecker1992scintigraphic}和在延迟代谢阶段中（示踪剂注射后4小时，1帧）扫描的延迟相。因此，主要存在的问题是需要确定要使用哪些相。
 
-（3）\textbf{动态骨显像本身的影像特点}。动态骨显像包括三种不同条件下采集的影像，分别是在注射后立刻动态扫描（2秒/帧，20帧）用于获取灌注信息的血池相、灌注后动态扫描（1分钟/帧，5帧）可帮助诊断炎症状况或血液供应问题的血流相\cite{schauwecker1992scintigraphic}和在延迟代谢阶段中（示踪剂注射后4小时，1帧）扫描的延迟相。因此，主要存在的问题是需要确定要使用哪些相。
+（4）动态骨显像具有时间连续性。动态骨显像中，每张图像拥有组织摄取形态特征，一系列图像之间在时序上存在生理代谢差异性变化特征。因此，如何利用动态骨显像的时序性特征也是一个需要研究的主要问题之一。
 
-（4）\textbf{动态骨显像具有时间连续性}。动态骨显像中，每张图像拥有组织摄取形态特征，一系列图像之间在时序上存在生理代谢差异性变化特征。因此，如何利用动态骨显像的时序性特征也是一个需要研究的主要问题之一。
-
-（5）\textbf{神经网络是一个缺乏解释的黑盒}。DBS-eNet是一个端到端的神经网络，可直接通过数据输入到模型之中获得最终结果。这导致医生很难以理解或者分析模型所提取和学习到的相关知识。这不仅缺乏决策过程中的透明性，还没有对模型的决策结果的解释，无法给医生带来可信度以及临床诊断的依据。
+（5）神经网络是一个缺乏解释的黑盒。DBS-eNet是一个端到端的神经网络，可直接通过数据输入到模型之中获得最终结果。这导致医生很难以理解或者分析模型所提取和学习到的相关知识。这不仅缺乏决策过程中的透明性，还没有对模型的决策结果的解释，无法给医生带来可信度以及临床诊断的依据。
 
 在本章研究中，设计了一个基于\(^{99m}\)TC-MDP动态骨显像的框架，用于辅助诊断假体关节感染。该框架针对上述问题一一进行优化改进：
 
@@ -39,7 +39,7 @@
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=\textwidth]{figures/chap03_workflow.jpg}
-  \caption{本章研究整体流程}
+  \bicaption{整体研究流程}{Overall research process}
   \label{fig:chap03_workflow}
 \end{figure}
 
@@ -49,18 +49,19 @@
 
 为了有效地解决动态骨显像数据规模较小、数据集不平衡以及存在自然高摄取区域的问题，本节设计了一个数据预处理流程，如图\ref{fig:chap03_preprocess}所示。通过该流程将动态骨显像转换成有效信息。具体流程如下：
 
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figures/chap03_preprocess.jpg}
+  \bicaption{动态骨显像的预处理流程}{Preprocessing flow of dynamic bone imaging}
+  \label{fig:chap03_preprocess}
+\end{figure}
+
 （1）数据清洗与标注：对收集的经历过关节置换手术的患者数据进行清洗，并且进行类别、干扰区域、感兴趣区域的标注；
 
 （2）预处理算法：需要将获取的原生数据转换成可有效区分的数据，去除掉自然高摄取区域的干扰；
 
 （3）数据增强：通过镜像与旋转生成新的数据样本，来增加数据的多样性，以缓解数据集过小的问题。
 
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[width=0.9\textwidth]{figures/chap03_preprocess.jpg}
-  \caption{针对动态骨显像的数据预处理整体流程示意图}
-  \label{fig:chap03_preprocess}
-\end{figure}
 
 \subsection{数据清洗与标注}
 
@@ -71,7 +72,7 @@
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=\textwidth]{figures/chap03_label.jpg}
-  \caption{动态骨显像的数据标注}
+  \bicaption{动态骨显像的数据标注}{Data annotation for dynamic bone imaging}
   \label{fig:chap03_label}
 \end{figure}
 
@@ -81,10 +82,10 @@
 
 由于原生的影像数据在不同个体之间的数值波动范围差异大以及存在自然高摄取区域，会极大地影响分类性能。因此，本节提出了三种预处理算法，将动态骨显像的影像数据转换为有效信息。预处理后得到的影像数据通过可视化后如图\ref{fig:chap03_algorithm}所示。
 
-\begin{figure}
+\begin{figure}[htbp]
   \centering
   \includegraphics[width=0.9\textwidth]{figures/chap03_algorithm.jpg}
-  \caption{三种预处理算法得到的有效信息示意图}
+  \bicaption{三种预处理算法的结果示意图}{Schematic of the results of the three preprocessing algorithms}
   \label{fig:chap03_algorithm}
 \end{figure}
 
@@ -126,18 +127,16 @@
 
 与标准预处理类似，首先读取动态骨显像中的血流相\(F\)和血池相\(P\)并计算出血流相和血池相中的最大值。然后，使用公式\ref{eq:chap03_Interference_reduction}通过干扰区域\(A_{IR}\)来降低自然高摄取区域的放射强度：
 \begin{equation}
-  \begin{aligned}
-    F_i^{m, n} & =
-    \begin{cases}
-      \alpha_{IR}F_i^{m, n}, & \text{if \((m,n) \in A_{IR}\)} \\
-      F_i^{m, n},            & \text{otherwise}
-    \end{cases} \\
-    P_j^{m, n} & =
-    \begin{cases}
-      \alpha_{IR}P_j^{m, n}, & \text{if \((m,n) \in A_{IR}\)} \\
-      P_j^{m, n},            & \text{otherwise}
-    \end{cases}
-  \end{aligned}
+  F_i^{m, n}  =
+  \begin{cases}
+    \alpha_{IR}F_i^{m, n}, & \text{if \((m,n) \in A_{IR}\)} \\
+    F_i^{m, n},            & \text{otherwise}
+  \end{cases} \quad
+  P_j^{m, n}  =
+  \begin{cases}
+    \alpha_{IR}P_j^{m, n}, & \text{if \((m,n) \in A_{IR}\)} \\
+    P_j^{m, n},            & \text{otherwise}
+  \end{cases}
   \label{eq:chap03_Interference_reduction}
 \end{equation}
 其中，\(\alpha_{IR} \in [0, 1]\)表示对干扰区域的衰竭程度，默认值为\(0.4\)。最后通过标准预处理的公式\ref{eq:chap03_standard}对血流相和血池相数据进行处理。
@@ -146,38 +145,32 @@
 
 基于感兴趣区域预处理来源于核医学医生在诊断过程中通过分析正常髋部与关节置换手术后的髋部之间的差异做出决策。由此，通过基于感兴趣区域处理后将得到差异特征，不同于标准预处理和干扰减少预处理得到的强度特征。基于感兴趣区域预处理的算法过程如下。
 
-首先，根据标注大小为\(40 \times 40\)的感兴趣区域，从动态骨显像中将该区域裁剪出来。其次，根据类别信息\(c\)和位置信息\(p\)，计算正常的左髋和右髋的平均值，如公式\ref{eq:chap03_normalL}和\ref{eq:chap03_normalR}所示：
+首先，根据标注大小为\(40 \times 40\)的感兴趣区域，从动态骨显像中将该区域裁剪出来。其次，根据类别信息\(c\)和位置信息\(p\)，计算正常的左髋和右髋的平均值，如公式\ref{eq:chap03_normal}所示：
 \begin{equation}
   \begin{aligned}
-    FNL_{i}^{m, n} & = \text{mean}(\sum_{c_i = \text{正常}, p_i = \text{左} } F_i^{n, m}) \\
-    PNL_{i}^{m, n} & = \text{mean}(\sum_{c_i = \text{正常}, p_i = \text{左} } P_i^{n, m})
+    FNL_{i}^{m, n} & = \text{mean}(\sum_{c_i = \text{正常}, p_i = \text{左} } F_i^{n, m}) & \quad PNL_{i}^{m, n} & = \text{mean}(\sum_{c_i = \text{正常}, p_i = \text{左} } P_i^{n, m}) \\
+    FNR_{i}^{m, n} & = \text{mean}(\sum_{c_i = \text{正常}, p_i = \text{右} } F_i^{n, m}) & \quad PNR_{i}^{m, n} & = \text{mean}(\sum_{c_i = \text{正常}, p_i = \text{右} } P_i^{n, m})
   \end{aligned}
-  \label{eq:chap03_normalL}
-\end{equation}
-\begin{equation}
-  \begin{aligned}
-    FNR_{i}^{m, n} & = \text{mean}(\sum_{c_i = \text{正常}, p_i = \text{右} } F_i^{n, m}) \\
-    PNR_{i}^{m, n} & = \text{mean}(\sum_{c_i = \text{正常}, p_i = \text{右} } P_i^{n, m})
-  \end{aligned}
-  \label{eq:chap03_normalR}
+  \label{eq:chap03_normal}
 \end{equation}
 其中，\(i, j, m, n\)与公式\ref{eq:chap03_standard}一致，\(FNL, PNL\)分别表示正常左髋血流相和血池相的平均值，\(FNR, PNR\)分别表示正常右髋血流相和血池相的平均值。最后，对于其他的经历过关节置换手术的感兴趣区域的血流相和血池相\(FROI, PROI\)，将根据公式\ref{eq:chap03_roi}进行计算，获得与正常髋部之间的差异特征：
 \begin{equation}
   \begin{aligned}
     FROI_i^{m, n} & =
     \begin{cases}
-      FROI_i^{m, n} - FNL_i^{m, n}, & \text{if \(pROI_i = \)左} \\
-      FROI_i^{m, n} - FNR_i^{m, n}, & \text{if \(pROI_i = \)右}
+      FROI_i^{m, n} - FNL_i^{m, n}, & \text{if \(p = \)左} \\
+      FROI_i^{m, n} - FNR_i^{m, n}, & \text{if \(p = \)右}
     \end{cases} \\
     PROI_i^{m, n} & =
     \begin{cases}
-      PROI_i^{m, n} - PNL_i^{m, n}, & \text{if \(pROI_i = \)左} \\
-      PROI_i^{m, n} - PNR_i^{m, n}, & \text{if \(pROI_i = \)右}
+      PROI_i^{m, n} - PNL_i^{m, n}, & \text{if \(p = \)左} \\
+      PROI_i^{m, n} - PNR_i^{m, n}, & \text{if \(p = \)右}
     \end{cases}
   \end{aligned}
   \label{eq:chap03_roi}
 \end{equation}
-其中，\(pROI_i\)表示经历过关节置换手术的髋部的位置信息。
+
+其中，\(p\)表示经历过关节置换手术的髋部的位置信息。
 
 \subsection{数据增强}
 
@@ -185,24 +178,24 @@
 
 \section{DBS-eNet}
 
-动态骨显像拥有两个具有时序的血流相和血池相，它们展示了一个患者在注射药剂后不同时间点下的状态。由于CNN和ConvLSTM在提取特征能力上拥有各自的适用领域，本章提出了结合了CNN和ConvLSTM的DBS-eNet。该模型设计了卷积对输入的特征进行下采样和图像特征提取，有助于减少模型的计算量和参数量，并且采用了ConvLSTM继续丰富图像特征并提取时序特征。卷积和ConvLSTM的组合可以增强对动态骨显像的特征提取能力，为模型提供图像以及时序上的混合特征信息。
+动态骨显像拥有两个具有时序的血流相和血池相，它们展示了一个患者在注射药剂后不同时间点下的状态。由于CNN和ConvLSTM在提取特征能力上拥有各自的适用领域，本章提出了结合了CNN和ConvLSTM的DBS-eNet。该模型设计了卷积对输入的特征进行下采样和图像特征提取，有助于减少模型的计算量和参数量，并且采用了ConvLSTM继续丰富图像特征并提取时序特征。卷积和ConvLSTM的组合可以增强对动态骨显像的特征提取能力，用以提供图像以及时序上的混合特征信息。
 
 \subsection{模型结构}
 
-\begin{figure}[H]
+根据动态骨显像是具有时序性的单通道二维图像序列，针对性地构建了基于深度学习和多特征的有效分类网络DBS-eNet的三个部分，模型结构如图\ref{fig:chap03_framework}所示。
+
+\begin{figure}[ht]
   \centering
   \includegraphics[width=\textwidth]{figures/chap03_framework.jpg}
-  \caption{基于深度学习的多特征神经网络模型（DBS-eNet）}
+  \bicaption{基于深度学习的多特征神经网络模型DBS-eNet}{DBS-eNet: A multi-feature neural network based on deep learning}
   \label{fig:chap03_framework}
 \end{figure}
 
-根据动态骨显像是具有时序性的单通道二维图像序列，针对性地构建了基于深度学习和多特征的有效分类网络DBS-eNet的三个部分，模型结构如图\ref{fig:chap03_framework}所示。
-
 第一部分是一个共享权重且用于提取生理摄取形态特征的\(1 \times 7 \times 7\)的三维卷积层、批归一化层（Batch Normalization）\cite{ioffe2015batch}、校正线性单元(Rectified Linear Unit，ReLU)和用于下采样的最大池化层（Max Pooling）组成。其中，\(1 \times 7 \times 7\)三维卷积层是时序卷积，在时序维度上权重的尺寸为1，等价于对每一张图像进行特征提取。又由于血流相和血池相是一个患者在不同时间点下的状态，即在血流相和血池相上病灶区域处于同一位置。因此，时序卷积设定为共享权重的形式，去提取血流相和血池相上每一张图像中同一病灶的特征，同时减少参数量。批归一化层用在卷积层之后可以避免数据分布发生变化，用以保留网络各层在训练过程中的学习成果。ReLU激活函数可以有效解决梯度消失的问题并加快模型的收敛速度。最大池化层则可以减少特征的维度的同时提取出特征中更好更强的语义信息。第一部分这样的设计，可以在减少参数量和计算量的同时保持特征的主要语义信息。
 
-第二部分是一个由一层\(7 \times 7\)的ConvLSTM和两层\(3 \times 3\)的ConvLSTM组成。这一设计旨在通过ConvLSTM的结构，在图像处理的过程中更加全面地捕捉和丰富生理形态摄取特征并且在图像序列之中捕获生理代谢差异变化特征。首先，\(7 \times 7\)的ConvLSTM通过更大的感受野去有效丰富影像中病灶的摄取形态特征。接着，两层\(3 \times 3\)的ConvLSTM以较小的卷积核去捕捉到病灶摄取形态中的各种细节和纹理特征。最后，通过引入时序感知的ConvLSTM，网络不仅可以更好地理解单一图像的内容，还能够在图像序列中建模和捕捉时间上的关联性，从而更全面地分析病灶区域中药剂的摄取形式和程度变化。因此，第二部分在图像特征的丰富性和时序特征的捕获上取得了良好的平衡，为整个网络的性能提供了更强大的表达能力。
+第二部分是一个由一层\(7 \times 7\)的ConvLSTM和两层\(3 \times 3\)的ConvLSTM组成。这一设计旨在图像处理的过程中更加全面地捕捉和丰富生理形态摄取特征并且捕获序列之中生理代谢差异变化特征。首先，\(7 \times 7\)的ConvLSTM通过更大的感受野去丰富影像中病灶的摄取形态特征。接着，两层\(3 \times 3\)的ConvLSTM以较小的卷积核去捕捉到病灶摄取形态中的各种细节和纹理特征。最后，时序感知的ConvLSTM在更好地理解单一图像内容的基础上，还能够在图像序列中建模和捕捉时间上的关联性，从而更全面地分析病灶区域中药剂的摄取形式和程度变化。因此，第二部分在图像特征和时序特征上取得了良好的平衡，为整个网络的性能提供了强大的表达能力。
 
-第三部分是特征融合层和两层全连接层，融合来自于血流相和血池相中提取的图像特征和时序特征来计算最终诊断结果的概率。首先，特征融合层通过逐元素地融合来更全面、准确地反映动态骨显像中图像序列的复杂特征。接着，第一层全连接层引入GELUs（Gaussian error linear units）和Dropout\cite{srivastava2014dropout}。GELUs有助于于引入非线性元素，增强网络对特征的表达能力，同时Dropout则在一定程度上减轻了过拟合的风险，提供了模型的泛化能力。最后，第二层全连接层的输出经过Dropout层的处理，进一步强化了网络对复杂特征的建模能力。第三部分通过这样的设计，有助于确保网络在处理两个相的时序图像特征时保持稳健性，提供可靠而精准的结果。
+第三部分是特征融合层和两层全连接层，融合来自于血流相和血池相中提取的图像特征和时序特征并计算诊断结果的概率。首先，特征融合层通过逐元素地融合来更全面准确地反映图像序列的复杂特征。接着，第一层全连接层引入GELUs（Gaussian error linear units）和Dropout\cite{srivastava2014dropout}。这不仅有助于于引入非线性元素，增强网络对特征的表达能力，同时还在一定程度上减轻了过拟合的风险。最后，第二层全连接层的输出经过Dropout层的处理，进一步提升了网络的泛化能力。第三部分的设计有助于确保网络在处理两个相的时序图像特征时保持稳健性，提供可靠而精准的结果。
 
 \subsection{ConvLSTM}
 
@@ -221,7 +214,7 @@ ConvLSTM是DBS-eNet网络中的核心模块。由于动态骨显像是一个图�
 \end{equation}
 其中，\(i_t,f_t,o_t,h_t,c_t\)分别表示\(t\)时刻下的输入们、遗忘门、输出门、隐藏状态和记忆单元，\(\odot\)表示逐元素相乘。多个LSTMs可以堆叠起来形成更加复杂的结构，用以解决更多更复杂的序列建模任务。
 
-尽管LSTM可以解决序列建模任务，但是记忆单元中的状态信息和输出都是一个数值，无法处理更加复杂的序列问题。为了解决这个问题，ConvLSTM在LSTM的基础上进行了扩展，将输入到状态和状态到状态的转换过程修改为卷积计算。为了更好地处理时空数据，ConvLSTM在设计上的显著区别在于输入\(\mathcal{X}_t\)、记忆单元的输出\(\mathcal{H}_t\)和状态信息\(\mathcal{C}_t\)都是二维数据，即空间维度。为了更好地理解输入和状态信息，可以将它们视为一个空间网格。ConvLSTM通过输入和状态信息的局部邻域来确定网格中某个位置的未来状态。这可以很简单地通过卷积操作来实现状态到状态和输入到状态的转变。ConvLSTM的关键公式如\ref{eq:chap03_convlstm}所示：
+尽管LSTM可以解决序列建模任务，但是无法处理更加复杂的序列问题。为了解决这个问题，ConvLSTM在LSTM的基础上进行了扩展，将输入到状态和状态到状态的转换过程修改为卷积计算，关键公式如\ref{eq:chap03_convlstm}所示：
 \begin{equation}
   \begin{aligned}
     i_t           & = \sigma(W_{xi} \ast \mathcal{X}_t + W_{hi} \ast \mathcal{H}_{t-1} + W_{ci} \odot \mathcal{C}_{t-1} + b_i)          \\
@@ -232,7 +225,7 @@ ConvLSTM是DBS-eNet网络中的核心模块。由于动态骨显像是一个图�
   \end{aligned}
   \label{eq:chap03_convlstm}
 \end{equation}
-其中，\(\ast\)表示为卷积计算，\(\odot\)表示逐元素相乘。为了确保状态信息在计算过程中空间大小不变且与输入相同，在进行卷积计算之前需要进行填充（padding）。
+其中，\(\ast\)表示为卷积计算，\(\odot\)表示逐元素相乘，输入\(\mathcal{X}_t\)、记忆单元的输出\(\mathcal{H}_t\)和状态信息\(\mathcal{C}_t\)都是二维数据，即空间维度。为了更好地理解输入和状态信息，可以将它们视为一个空间网格。ConvLSTM通过输入和状态信息的局部邻域来确定网格中某个位置的未来状态。这可以很简单地通过卷积操作来实现状态到状态和输入到状态的转变。为了确保状态信息在计算过程中空间大小不变且与输入相同，在进行卷积计算之前需要进行填充（padding）。
 
 \subsection{损失函数}
 
@@ -273,9 +266,10 @@ ConvLSTM是DBS-eNet网络中的核心模块。由于动态骨显像是一个图�
 
 \subsection{实验环境}
 
+本章中的所有实验均在PAI上海大学机器学习平台上进行。该平台是由上海大学计算机学院设计和构建的多加速器异构集群。本章实验的软硬件配置如表\ref{tab:chap03_experimental_config}所示。
 \begin{table}[htbp]
   \centering
-  \caption{实验配置}
+  \bicaption{实验配置}{Experimental setup}
   \begin{tabular}{cc}
     \toprule
     环境         & 配置                                     \\
@@ -290,14 +284,15 @@ ConvLSTM是DBS-eNet网络中的核心模块。由于动态骨显像是一个图�
   \end{tabular}
   \label{tab:chap03_experimental_config}
 \end{table}
-
-本章中的所有实验均在PAI上海大学机器学习平台上进行。该平台是由上海大学计算机学院设计和构建的多加速器异构集群。PAI平台是上海大学首台采用自主开发的基于容器的PAI管理系统的异构计算平台，专注于支持机器学习和深度学习的科研和教学活动。自2018年6月以来，该平台一直提供稳定的计算服务。在硬件方面，该平台包括2个登录/管理节点、1套KNL计算节点、2个FPGA节点、10个双GPU节点、1台配备四个GPU的DGX-station、4个I/O节点，以及一套200T光纤存储阵列，同时配备有1套100G IB高速网络、1套100G OPA高速网络和1套千兆管理网络。这一多样化的硬件配置为各种计算需求提供了灵活的支持。平台的管理软件由上海大学计算机学院自主开发完成，学生们负责相应的软件维护和升级工作。PAI平台不仅面向全校师生提供了丰富的教学资源，还为各类计算任务提供了强大的计算服务。本章的实验的软硬件配置的详细信息如表\ref{tab:chap03_experimental_config}所示。
+PAI平台是上海大学首台采用自主开发的基于容器的PAI管理系统的异构计算平台，专注于支持机器学习和深度学习的科研和教学活动。自2018年6月以来，该平台一直提供稳定的计算服务。在硬件方面，该平台包括2个登录/管理节点、1套KNL计算节点、2个FPGA节点、10个双GPU节点、1台配备四个GPU的DGX-station、4个I/O节点，以及一套200T光纤存储阵列，同时配备有1套100G IB高速网络、1套100G OPA高速网络和1套千兆管理网络。这一多样化的硬件配置为各种计算需求提供了灵活的支持。平台的管理软件由上海大学计算机学院自主开发完成，学生们负责相应的软件维护和升级工作。PAI平台不仅面向全校师生提供了丰富的教学资源，还为各类计算任务提供了强大的计算服务。
 
 \subsection{数据集}
 
+本文作者与上海市第六人民医院核医学科进行合作构建了假体关节感染动态骨显像数据集。该数据集包含髋关节置换手术和膝关节置换手术后患者的动态骨显像，分类详情见表\ref{tab:chap03_dataset}所示，一共纳入了从2016年1月至2021年6月之间455例具有最终诊断结果的患者，其中258名患者经历了髋关节置换手术，197名患者经历了膝关节置换手术。在查看了所有患者的影像后，其中6例患者由于影像不全被排除。最终纳入并分析了449例患者。所有患者在经历了膝关节置换手术或髋关节置换手术后均出现疼痛或关节功能障碍，且都进行了翻修手术。假体关节感染的最终诊断结果主要基于2021年的EBJIS诊断指南的定义\cite{mcnally2021ebjis}。在本章的数据集中，一共有192例感染患者和257例非感染患者。
+
 \begin{table}[htbp]
   \centering
-  \caption{动态骨显像的分布情况}
+  \bicaption{动态骨显像的分布情况}{Distribution of dynamic bone scintigraphy}
   \begin{tabular}{lcc}
     \toprule
     标签   & 髋部 & 膝部 \\
@@ -309,11 +304,9 @@ ConvLSTM是DBS-eNet网络中的核心模块。由于动态骨显像是一个图�
   \label{tab:chap03_dataset}
 \end{table}
 
-本文作者与上海市第六人民医院核医学科进行合作构建了假体关节感染动态骨显像数据集。该数据集包含髋关节置换手术和膝关节置换手术后患者的动态骨显像，分类详情见表\ref{tab:chap03_dataset}所示，一共纳入了从2016年1月至2021年6月之间455例具有最终诊断结果的患者，其中258名患者经历了髋关节置换手术，197名患者经历了膝关节置换手术。在查看了所有患者的影像后，其中6例患者由于影像不全被排除。最终纳入并分析了449例患者。所有患者在经历了膝关节置换手术或髋关节置换手术后均出现疼痛或关节功能障碍，且都进行了翻修手术。假体关节感染的最终诊断结果主要基于2021年的EBJIS诊断指南的定义\cite{mcnally2021ebjis}。在本章的数据集中，一共有192例感染患者和257例非感染患者。
-
 \subsection{评估指标}
 
-假体关节感染诊断任务属于分类问题，本章选用了分类任务中常用的评估指标，如准确率（Accuracy，Acc）、特异率（Specificity，Spec）、敏感率（Sensitivity，Sen）、F1值（F1 Score），阴性预测值（Negative Predictive Value，NPV）、阳性预测值（Positive Predictive Value，PPV）和接收者操作特征曲线下面积（Area Under the receiver operating characteristic Curve，AUC），如式\ref{eq:chap03_metric}所示：
+假体关节感染诊断任务属于分类问题，本章选用了分类任务中常用的评估指标，如准确率（Accuracy，Acc）、特异率（Specificity，Spec）、敏感率（Sensitivity，Sen）、F1值（F1 Score），阴性预测值（Negative Predictive Value，NPV）、阳性预测值（Positive Predictive Value，PPV）和接收者操作特征曲线下面积（Area Under the receiver operating characteristic Curve，AUC）。其中，准确率表示对假体关节感染预测准确的样本在总样本的占比，但在样本不均衡的情况下，不能够很好地评估模型性能的优劣。特异率表示对实际不患有假体关节感染的患者诊断为未感染的概率。敏感率表示对实际上患有假体关节感染的患者诊断为感染的概率。阳性预测值表示为被诊断为感染的患者实际上患有假体关节感染的概率。阴性预测值表示为被诊断为未感染的患者实际上未患有假体关节感染的概率。F1值是阳性预测值和敏感率的综合评价指标。AUC是敏感性和特异性的综合评价指标。它们的计算公式\ref{eq:chap03_metric}所示：
 \begin{equation}
   \begin{aligned}
     Acc  & = \frac{TP+TN}{Total}                                         & F1  & = \frac{2 \times PPV \times Sen}{PPV + Sen} \\
@@ -325,17 +318,17 @@ ConvLSTM是DBS-eNet网络中的核心模块。由于动态骨显像是一个图�
 \end{equation}
 其中，\(TP,TN,FP,FN\)分别是真阳性、真阴性、假阳性、假阴性样本的数量；\(Total\)表示样本的整体数量；\(P\)表示阳性的类别；\(M,N\)分别是阳性样本和阴性样本的数量；\(rank_i\)是第\(i\)个样本的序号，所有的预测样本根据阳性预测值从小到大进行排序。
 
-准确率表示对假体关节感染预测准确的样本在总样本的占比，但在样本不均衡的情况下，不能够很好地评估模型性能的优劣。特异率表示对实际不患有假体关节感染的患者诊断为未感染的概率。敏感率表示对实际上患有假体关节感染的患者诊断为感染的概率。阳性预测值表示为被诊断为感染的患者实际上患有假体关节感染的概率。阴性预测值表示为被诊断为未感染的患者实际上未患有假体关节感染的概率。F1值是阳性预测值和敏感率的综合评价指标。AUC是敏感性和特异性的综合评价指标。
-
 此外，实验中采用了Bootstrap\cite{hesterberg2011bootstrap}来计算这些评估指标的置信区间，并采用麦克内马尔检验（McNemar test）\cite{lachenbruch2014mcnemar}进行统计学分析，来验证DBS-eNet与专业的核医学医生之间的差异性。更进一步地采用了校准曲线（Calibration Curve）和决策曲线分析（Decision Curve Analysis，DCA）\cite{vickers2006decision}来更加全面地评估本章框架的潜在应用价值和有效性。校准曲线可以描绘模型输出的概率与实际观察到的事件发生概率之间的关系，在本章研究中用于评估DBS-eNet预测假体关节感染的概率与实际假体关节感染的概率之间的一致性。决策曲线分析是一种用于评估模型在不同概率阈值下其决策效果的方法。它通常应用于医学领域，特别是在评估临床预测模型的效果。决策曲线分析有助于确定模型在不同概率阈值下相对于其他决策策略的净收益，并为医学决策提供了实用的信息。
 
 \subsection{实验结果}
 
-实验中，对于构建的动态骨显像数据集先进行上述中的数据预处理后，可以从经历了髋关节置换手术的患者的动态骨显像中获得差异特征（\(25\times40\times40\)）以及从经历了膝关节置换手术的患者的动态骨显像中获得强度特征（\(25\times128\times128\)），用于模型训练。对于模型的训练配置，采用了标准的随机梯度下降（Stochastic Gradient Descent，SGD）优化器，初始的学习率设置为0.01，动量（momentum）为0.8，权重衰减（weight decay）为0.0005。批大小（batch size）设置为4，Dropout的比例设置为0.2，以及整个训练周期（epoch）为80。在训练周期的一半和四分之三，学习率将乘以0.1。
+实验中，对于构建的动态骨显像数据集先进行上述中的数据预处理后，可以从经历了髋关节置换手术的患者的动态骨显像中获得差异特征（\(25\times40\times40\)）以及从经历了膝关节置换手术的患者的动态骨显像中获得强度特征（\(25\times128\times128\)），用于模型训练。对于模型的训练配置，采用了随机梯度下降（Stochastic Gradient Descent，SGD）优化器，学习率设置为0.01，动量（momentum）为0.8，权重衰减（weight decay）为0.0005。批大小（batch size）设置为4，Dropout的比例设置为0.2，以及整个训练周期（epoch）为80。在训练周期的一半和四分之三，学习率将乘以0.1。
+
+为了评估不同预处理算法在髋部动态骨显像的效果，进行了三种预处理的对比实验，如表\ref{tab:chap03_experiment_pre}所示。基于感兴趣区域预处理的效果最佳，优于干扰减少预处理与标准预处理。这是由于基于感兴趣区域预处理，相比较于标准预处理去掉了自然高摄取区域以外，还使用差异特征替代强度特征，从而避免了在数据集较小的情况下，自然高摄取区域给神经网络带来的偏差干扰。干扰减少预处理则是由于简单但不自然地减弱自然高摄取区域强度的方式，造成了动态骨显像上存在断崖式的强度变化，从而导致了模型的综合性能下降。
 
 \begin{table}[htbp]
   \centering
-  \caption{髋部动态骨显像上不同预处理算法之间的比较}
+  \bicaption{髋部动态骨显像上不同预处理算法之间的比较}{Comparison between different preprocessing methods on hip dynamic bone scintigraphy}
   \begin{tabular}{lcc}
     \toprule
     准确率（\%）         & 五折交叉验证 & 独立验证 \\
@@ -348,13 +341,11 @@ ConvLSTM是DBS-eNet网络中的核心模块。由于动态骨显像是一个图�
   \label{tab:chap03_experiment_pre}
 \end{table}
 
-为了评估不同预处理算法在髋部动态骨显像的效果，进行了三种预处理的对比实验，如表\ref{tab:chap03_experiment_pre}所示。基于感兴趣区域预处理的效果最佳，优于干扰减少预处理与标准预处理。这是由于基于感兴趣区域预处理，相比较于标准预处理去掉了自然高摄取区域以外，还使用差异特征替代强度特征，从而避免了在数据集较小的情况下，自然高摄取区域给神经网络带来的偏差干扰。干扰减少预处理则是由于简单但不自然地减弱自然高摄取区域强度的方式，造成了动态骨显像上存在断崖式的强度变化，从而导致了模型的综合性能下降。
-
-
+DBS-eNet的综合性能实验结果如表\ref{tab:chap03_ex_DBS-eNet}所示。在五折交叉验证中，对假体膝关节感染的准确率和AUC值分别为86.48\% (80.98\%, 91.41\%)和0.889 (0.825, 0.933)，对假体髋关节感染的准确率分别为86.33\% (81.50\%, 90.75\%)和0.866 (0.809, 0.911)。在独立验证中，对假体膝关节感染的准确率和AUC值分别达到87.74\% (82.58\%, 92.90\%)和0.957 (0.905, 0.973)，对假体髋关节感染的准确率分别达到86.36\% (81.81\%, 90.91\%)和0.906 (0.859, 0.946)。这表明了DBS-eNet具有较高的综合性能。
 
 \begin{table}[htbp]
   \centering
-  \caption{DBS-eNet在五折交叉验证和独立验证上的综合性能}
+  \bicaption{DBS-eNet在五折交叉验证和独立验证上的性能表现}{the Performance of DBS-eNet on five-fold cross validation and independent validation}
   \resizebox{\textwidth}{!}{
     \begin{tabular}{lp{2cm}p{2cm}p{2cm}p{2cm}p{2cm}p{2cm}p{2cm}}
       \toprule
@@ -374,13 +365,13 @@ ConvLSTM是DBS-eNet网络中的核心模块。由于动态骨显像是一个图�
   \label{tab:chap03_ex_DBS-eNet}
 \end{table}
 
-DBS-eNet的综合性能实验结果如表\ref{tab:chap03_ex_DBS-eNet}所示。在五折交叉验证中，对假体膝关节感染的准确率和AUC值分别为86.48\% (80.98\%, 91.41\%)和0.889 (0.825, 0.933)，对假体髋关节感染的准确率分别为86.33\% (81.50\%, 90.75\%)和0.866 (0.809, 0.911)。在独立验证中，对假体膝关节感染的准确率和AUC值分别达到87.74\% (82.58\%, 92.90\%)和0.957 (0.905, 0.973)，对假体髋关节感染的准确率分别达到86.36\% (81.81\%, 90.91\%)和0.906 (0.859, 0.946)。这表明了DBS-eNet具有较高的综合性能。
-
 为了更好地评估DBS-eNet，实验中采用了五折交叉验证的方式对比了几个主流的卷积神经网络（VGG\cite{Simonyan2014VeryDC}，ResNet\cite{he2016deep}，DenseNet\cite{huang2017densely}和ConvNeXt\cite{liu2022convnet}）。为了将卷积神经网络应用于预处理后的动态骨显像数据，首先将预处理得到的血池相和血流相数据重采样到\(64 \times 64 \times 64\)。其次，二维卷积神经网络的卷积操作和下采样操作都修改为相应的三维操作。最后，卷积神经网络在卷积部分采用了共享权重，然后提取的特征进行融合并放入全连接层中得到预测结果。
+
+如表\ref{tab:chap03_DBS-eNet_vs_CNN}所示，可以看出DBS-eNet的性能优于其他的卷积神经网络，在膝关节置换手术和髋关节置换手术的五折交叉验证集上都具有最好的准确率、灵敏性、F1值和阴性预测值，以及良好的特异性和阳性预测值。这表明卷积和ConvLSTM的结合相比较于三维卷积更适合于具有时序性的图像序列，能够更有效地捕获动态骨显像中的时空特征信息，有效地提高了模型的分类性能。
 
 \begin{table}[htbp]
   \centering
-  \caption{DBS-eNet与主流分类网络在五折交叉验证中的平均性能比较}
+  \bicaption{DBS-eNet与分类网络在五折交叉验证中的比较}{Comparison between DBS-eNet and classification networks in five-fold cross validation}
   \resizebox{\textwidth}{!}{
     \begin{tabular}{lcccccccccccccc}
       \toprule
@@ -402,11 +393,9 @@ DBS-eNet的综合性能实验结果如表\ref{tab:chap03_ex_DBS-eNet}所示。�
   \label{tab:chap03_DBS-eNet_vs_CNN}
 \end{table}
 
-如表\ref{tab:chap03_DBS-eNet_vs_CNN}所示，可以看出DBS-eNet的性能优于其他的卷积神经网络，在膝关节置换手术和髋关节置换手术的五折交叉验证集上都具有最好的准确率、灵敏性、F1值和阴性预测值，以及良好的特异性和阳性预测值。这表明卷积和ConvLSTM的结合相比较于三维卷积更适合于具有时序性的图像序列，能够更有效地捕获动态骨显像中的时空特征信息，有效地提高了模型的分类性能。
-
 \begin{table}[htbp]
   \centering
-  \caption{DBS-eNet在独立测试集上与三名专业核医学医生之间的比较}
+  \bicaption{DBS-eNet在独立测试集上与专业医生的比较}{Comparison of DBS-eNet with specialist physicians on the independent test set}
   \resizebox{\textwidth}{!}{
     \begin{tabular}{lcccccccccccc}
       \toprule
@@ -434,7 +423,7 @@ DBS-eNet的综合性能实验结果如表\ref{tab:chap03_ex_DBS-eNet}所示。�
   \subfloat{
     \includegraphics[width=\textwidth]{figures/chap03_curve_hip.jpg}
   }
-  \caption{本章框架的ROC曲线（包含三名专业医生）、校准曲线与决策曲线分析}
+  \bicaption{ROC曲线、校准曲线与决策曲线分析}{ROC curve, calibration curve and decision curve analysis}
   \label{fig:chap03_ROC_CC_DAC}
 \end{figure}
 
@@ -442,16 +431,20 @@ DBS-eNet的综合性能实验结果如表\ref{tab:chap03_ex_DBS-eNet}所示。�
 
 \subsection{可视化分析}
 
-动态骨显像与Grad-CAM获得的热力图融合后的图像如图\ref{fig:chap03_Grad-CAM_t-SNE}(a)所示。动态骨显像中血流相和血池相的病灶区域都是重要性最大的区域，这表明DBS-eNet在预测这些影像的最终结果时可以正确聚焦病灶区域，也验证了本章提出的方法符合核医学医生在诊断决策中的判断。
-
-在图\ref{fig:chap03_Grad-CAM_t-SNE}(b)中，t-SNE得到的感染样本和未感染样本的特征点在膝关节置换手术和髋部关节置换手术数据集中都大致地被划分为两簇，体现了DBS-eNet提取的特征本身具有较好的可区分性，表明了该框架的良好性能。通过Grad-CAM和t-SNE方法，可以增加本章提出的框架的可解释性。此外，在对经历了关节置换手术的患者进行诊断时，如果医生之间的判定结果一致性较低，通过可视化框架的决策过程以及总结模型学习到的特定模式和影像学特征，可以为医生提供额外的意见作为参考，不仅有助于提高疾病诊断的准确率和效率，同时为后续的治疗和预后提供了有力的信息支持。
-
+动态骨显像与Grad-CAM获得的热力图融合后的图像如图\ref{fig:chap03_Grad-CAM}所示。
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=\textwidth]{figures/chap03_Grad-CAM_t-SNE.jpg}
-  \caption{(\textbf{a}) DBS-eNet的Grad-CAM热力图\quad(\textbf{b}) DBS-eNet的t-SNE散点图}
-  \label{fig:chap03_Grad-CAM_t-SNE}
+  \includegraphics[width=\textwidth]{figures/chap03_Grad-CAM.jpg}
+  \bicaption{DBS-eNet的Grad-CAM热力图}{Grad-CAM heatmap of DBS-eNet}\label{fig:chap03_Grad-CAM}
 \end{figure}
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{figures/chap03_t-SNE.jpg}
+  \bicaption{DBS-eNet的t-SNE散点图}{Scatter plot of t-SNE for DBS-eNet}\label{fig:chap03_t-SNE}
+\end{figure}
+动态骨显像中血流相和血池相的病灶区域都是重要性最大的区域，这表明DBS-eNet在预测这些影像的最终结果时可以正确聚焦病灶区域，也验证了本章提出的方法符合核医学医生在诊断决策中的判断。
+
+在图\ref{fig:chap03_t-SNE}中，t-SNE得到的感染样本和未感染样本的特征点在膝关节置换手术和髋部关节置换手术数据集中都大致地被划分为两簇，体现了DBS-eNet提取的特征本身具有较好的可区分性，表明了该框架的良好性能。通过Grad-CAM和t-SNE方法，可以增加本章提出的框架的可解释性。此外，在对经历了关节置换手术的患者进行诊断时，如果医生之间的判定结果一致性较低，通过可视化框架的决策过程以及总结模型学习到的特定模式和影像学特征，可以为医生提供额外的意见作为参考，不仅有助于提高疾病诊断的准确率和效率，同时为后续的治疗和预后提供了有力的信息支持。
 
 \section{本章小结}
 

@@ -1,6 +1,6 @@
 % \iffalse meta-comment
 %
-% Copyright (C) 2022 by Lele Liu <zhenyuzhang@shu.edu.cn>
+% Copyright (C) 2023 by Zhenyu Zhang <zhenyuzhang@shu.edu.cn>
 %
 % This file is the thesis template of Shanghai University (shuthesis), 
 % which is originally derived from ThuThesis.
@@ -19,7 +19,7 @@
 %
 % \iffalse
 %<*driver>
-\ProvidesFile{shuthesis.dtx}[2022/03/13 2.1.1 Shanghai University Thesis Template]
+\ProvidesFile{shuthesis.dtx}[2023/12/18 2.2.0 Shanghai University Thesis Template]
 \documentclass{ltxdoc}
 \usepackage{dtx-style}
 
@@ -262,13 +262,16 @@
 % \label{sec:option}
 %
 % \DescribeOption{type}
-% 选择论文类型, 当前支持: \option{master}, \option{doctor}, 为必选项.
+% 选择论文类型, 当前支持: \option{master}, \option{profmaster}, \option{doctor}, 为必选项.
 % \begin{latex}
 % % 博士论文
 % \documentclass[type=doctor]{shuthesis}
 %
 % % 硕士论文
 % \documentclass[type=master]{shuthesis}
+%
+% % 专业硕士论文
+% \documentclass[type=profmaster]{shuthesis}
 % \end{latex}
 %
 % \DescribeOption{secret}
@@ -617,13 +620,7 @@
 % \end{appendix}
 % \end{latex}
 %
-% \subsubsection{作者在攻读学位期间发表的论文}
-%
-% \DescribeEnv{publications}
-% 用 \env{enumerate} 环境进行罗列发表的论文. 
-%
-% \DescribeEnv{projects}
-% 用 \env{enumerate} 环境进行罗列所做的项目. 
+% \subsubsection{攻读学位期间取得的研究成果}
 %
 % \subsection{自定义}
 % \label{sec:othercmd}
@@ -692,7 +689,7 @@
 %<cls>\NeedsTeXFormat{LaTeX2e}[1999/12/01]
 %<cls>\ProvidesClass{shuthesis}
 %<cfg>\ProvidesFile{shuthesis.cfg}
-%<cls|cfg>[2022/03/13 v2.1.1 Shanghai University Thesis Template]
+%<cls|cfg>[2023/12/18 v2.2.0 Shanghai University Thesis Template]
 %    \end{macrocode}
 %
 % \subsection{定义选项}
@@ -701,7 +698,7 @@
 %<*cls>
 \hyphenation{Shu-Thesis}
 \def\shuthesis{\textsc{ShuThesis}}
-\def\version{2.1.1}
+\def\version{2.2.0}
 \RequirePackage{kvoptions}
 \SetupKeyvalOptions{
   family=shu,
@@ -712,9 +709,11 @@
 % 用 \pkg{kvoptions} 的 key=value 方式来设置论文类型.
 %    \begin{macrocode}
 \newif\ifshu@master
+\newif\ifshu@profmaster
 \newif\ifshu@doctor
 \define@key{shu}{type}{%
   \shu@masterfalse
+  \shu@profmasterfalse
   \shu@doctorfalse
   \expandafter\csname shu@#1true\endcsname}
 \def\shu@deprecated@type@option{%
@@ -806,10 +805,12 @@
 % 用户至少要提供一个选项, 指定论文类型.
 %    \begin{macrocode}
   \ifshu@master\relax\else
-    \ifshu@doctor\relax\else
-        \ClassError{shuthesis}%
-                   {Please specify thesis type in option: \MessageBreak
-                    type=[master|doctor]}{}
+    \ifshu@profmaster\relax\else
+      \ifshu@doctor\relax\else
+          \ClassError{shuthesis}%
+                    {Please specify thesis type in option: \MessageBreak
+                      type=[master|profmaster|doctor]}{}
+      \fi
     \fi
   \fi
 %    \end{macrocode}
@@ -943,7 +944,7 @@
 % 参考文献引用宏包. GB/T 7714—2015 《信息与文献 参考文献著录规则》是中国的参考文献推荐标准. 
 % 国内的绝大部分学术期刊、学位论文都使用了基于该标准的格式.
 %    \begin{macrocode}
-\RequirePackage[numbers,sort&compress]{natbib}
+\RequirePackage[numbers,sort&compress,square,super]{natbib}
 \RequirePackage{gbt7714}
 %    \end{macrocode}
 %
@@ -952,6 +953,14 @@
 %    \begin{macrocode}
 \patchcmd{\@chapter}{\addtocontents{lof}{\protect\addvspace{10\p@}}}{}{}{} % lof
 \patchcmd{\@chapter}{\addtocontents{lot}{\protect\addvspace{10\p@}}}{}{}{} % lot
+%    \end{macrocode}
+%
+% \changes{v2.2.0}{2023/12/18}{使用中文英文混排的图、表多标题}
+% 使用中文英文混排的图、表多标题, 支持单图与多子图
+%    \begin{macrocode}
+\RequirePackage[list=off]{bicaption}
+\captionsetup[figure][bi-second]{name=Figure} % 设置图的英文编号前缀
+\captionsetup[table][bi-second]{name=Table} % 设置表的英文编号前缀
 %    \end{macrocode}
 %
 % 生成有书签的 pdf 及其开关, 请结合 gbk2uni 避免书签乱码.
@@ -1084,11 +1093,12 @@
 % \subsubsection{字体}
 % \label{sec:font}
 % \begin{macro}{\normalsize}
-% 正文小四号 (12bp) 字, 行距为固定值 20 bp. 设置文字与公式的垂直距离.
+% \changes{v2.2.1}{2024/02/25}{默认行距设置为固定值 23 bp}
+% 正文小四号 (12bp) 字, 行距为固定值 23 bp. 设置文字与公式的垂直距离.
 %    \begin{macrocode}
 %<*cls>
 \renewcommand\normalsize{%
-  \@setfontsize\normalsize{12bp}{20bp}%
+  \@setfontsize\normalsize{12bp}{23bp}%
   \abovedisplayskip=13bp \@plus 2bp \@minus 2bp
   \abovedisplayshortskip=13bp \@plus 2bp \@minus 2bp
   \belowdisplayskip=\abovedisplayskip
@@ -1121,10 +1131,10 @@
 %
 % \begin{macro}{\shu@def@fontsize}
 % 根据习惯定义字号. 用法: \cs{shu@def@fontsize}\marg{字号名称}\marg{磅数}.
-% 所有字号定义时为单倍行距, 并提供选项指定行距倍数.
+% 所有字号定义时为 1.5 倍行距, 并提供选项指定行距倍数.
 %    \begin{macrocode}
 \def\shu@def@fontsize#1#2{%
-  \expandafter\newcommand\csname #1\endcsname[1][1.3]{%
+  \expandafter\newcommand\csname #1\endcsname[1][2]{%
     \fontsize{#2}{##1\dimexpr #2}\selectfont}}
 %    \end{macrocode}
 % \end{macro}
@@ -1348,6 +1358,7 @@
 %   \item 表：caption 在上, 段前空 12 磅, 段后空 6 磅
 % \end{itemize}
 %
+% \changes{v2.1.2}{2023/04/20}{增加子图题注的间距}
 %    \begin{macrocode}
 \let\old@tabular\@tabular
 \def\shu@tabular{\dawu[1.5]\old@tabular}
@@ -1358,6 +1369,7 @@
 \captionsetup[table]{position=top,belowskip={12bp-\intextsep},aboveskip=6bp}
 \captionsetup[figure]{position=bottom,belowskip={12bp-\intextsep},aboveskip=6bp}
 \captionsetup[sub]{font=shu,skip=6bp}
+\captionsetup[subfigure]{belowskip=3bp}
 \renewcommand{\thesubfigure}{(\alph{subfigure})}
 \renewcommand{\thesubtable}{(\alph{subtable})}
 %\renewcommand{\p@subfigure}{:}
@@ -1371,6 +1383,20 @@
 %</cls>
 %    \end{macrocode}
 %
+% 算法环境
+%
+% 使用 \texttt{algorithm2e} 宏包
+%    \begin{macrocode}
+%<*cls>
+\RequirePackage[ruled,linesnumbered,algochapter]{algorithm2e}
+%</cls>
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+%<*cfg>
+\renewcommand{\algorithmcfname}{算法}
+%</cfg>
+%    \end{macrocode}
 %
 % \subsubsection{章节标题}
 % \label{sec:theor}
@@ -1468,8 +1494,8 @@
     pagestyle={shu@headings},
     beforeskip={9bp},
     aftername=\hskip\ccwd,
-    afterskip={24bp},
-    format={\centering\shu@title@font\heiti\xiaoer[1]},
+    afterskip={20bp},
+    format={\centering\shu@title@font\heiti\xiaoer[1.2]},
     nameformat=\relax,
     number=\chinese{chapter},
     numberformat=\relax,
@@ -1543,6 +1569,7 @@
 %    \end{macrocode}
 %
 % \begin{macro}{\tableofcontents}
+% \changes{v2.2.0}{2023/12/18}{目录使用全部黑体}
 % 调整目录样式.
 %    \begin{macrocode}
 \def\@pnumwidth{2em}
@@ -1751,8 +1778,8 @@
 \def\shu@secret@content{%
   \unskip~$\bigstar$ %
   \shu@secretyear~年}
-\def\shu@cdegree{\ifshu@doctor 博士\else 硕士\fi}
-\def\shu@edegree{\ifshu@doctor Doctor\else Master\fi}
+\def\shu@cdegree{\ifshu@doctor 博士\else \ifshu@master 硕士\else 专业硕士\fi\fi}
+\def\shu@edegree{\ifshu@doctor Doctor\else \ifshu@master Master\else Professional Master\fi\fi}
 \cdate{\CJK@todaybig}
 \edate{\ifcase \month \or January\or February\or March\or April\or May%
        \or June\or July \or August\or September\or October\or November
@@ -1761,11 +1788,12 @@
 %</cfg>
 %    \end{macrocode}
 %
-%
+% \changes{v2.1.3}{2023/09/26}{增加专业硕士}
 % \myentry{封面第一页}
 % \begin{macro}{\shu@first@page}
 %    \begin{macrocode}
 %<*cls>
+
 \def\shu@first@page{\renewcommand{\ULthickness}{1.8pt}%
  {\noindent\ifxetex\XBSong\else\bfseries\songti\fi%
  中图分类号：{\bfseries\shu@catalognumber}\hfill 单位代号：{\bfseries 10280\hphantom{000}}\\
@@ -1781,12 +1809,16 @@
    \raisebox{1ex}[0pt][0pt]{
    \includegraphics[height=3cm,width=9.8cm]{shu.pdf}}\hskip5mm
    \includegraphics[height=3.3cm,width=2.7cm]{shulogo.pdf}\fi\par\vskip5mm
-   \hskip3mm{\maxsize\ifxetex\LanTingHei\else\bfseries\heiti\fi\shu@cdegree 学位论文}
+   \centerline{\maxsize\ifxetex\LanTingHei\else\bfseries\heiti\fi\shu@cdegree 学位论文}
  \par\vskip-1mm
  \noindent\uline{\hskip\linewidth}\par\vskip1mm
  {\zihao{-1}\bfseries 
   \centerline{SHANGHAI~~UNIVERSITY}
-  \centerline{\MakeUppercase{\shu@edegree}'S~~DISSERTATION}}
+  \ifshu@profmaster
+  \centerline{\MakeUppercase{\shu@edegree}'S}
+  \centerline{DISSERTATION}
+  \else
+  \centerline{\MakeUppercase{\shu@edegree}'S~~DISSERTATION}\fi}
  \begin{center}
   {\setlength\arrayrulewidth{1pt}
   \begin{tabular}{|c|c|}
@@ -1828,6 +1860,7 @@
 %    \end{macrocode}
 %
 % \myentry{答辩委员签名}
+% \changes{v2.2.0}{2023/12/15}{修改封面格式}
 % \begin{macro}{\shu@committee}
 %    \begin{macrocode}
 %<*cls>
@@ -1836,20 +1869,20 @@
  {\noindent 姓\hphantom{空白}名：{\shu@cauthor}\hfill 学号：{\shu@id}\\
   论文题目：\let\\=\relax{\shu@ctitle}} \par
  \vskip1.5cm
- \noindent\centerline{\zihao{2} 上海大学} \par
+ \noindent\centerline{\zihao{2} \ifxetex\LanTingHei\else\bfseries\heiti\fi 上海大学} \par
  \vskip1.5cm
  \erhao[1.5] 本论文经答辩委员会全体委员审查，
- 确认符合上海大学\shu@cdegree 学位论文质量要求。\par 
+ 确认符合上海大学\shu@cdegree 学位论文质量要求。\par
  \vskip3.9cm
  \zihao{-2} 答辩委员会签名:\par
  \vskip1cm
- 主席:\par
+ 主\hphantom{空白}席:\par
  \vskip1cm
- 委员:\par
+ 委\hphantom{空白}员:\par
  \vskip5cm
  导\hphantom{空白}师:\par
  \vskip1cm
- 答辩日期:
+ 答辩日期: \hphantom{空白空白}年\hphantom{空白}月\hphantom{空白}日
  \if@openright\cleardoublepage\else\clearpage\fi
  }
 %</cls>
@@ -1857,35 +1890,39 @@
 % \end{macro}
 %
 % \myentry{原创性声明}
+% \changes{v2.2.0}{2023/12/15}{修改封面格式}
 % \begin{macro}{\shu@authordeclare}
 %    \begin{macrocode}
 %<*cls>
 \newcommand{\shu@authordeclare}{%
  {\noindent 姓\hphantom{空白}名：{\shu@cauthor}\hfill 学号：{\shu@id}\\
   论文题目：\let\\=\relax{\shu@ctitle}} \par
- \begin{center}
- \zihao{2}\ifxetex\XBSong\else\bfseries\songti\fi 原创性声明
- \end{center}
- \par\vskip1cm\sihao[1.7] 
- 本人声明：所呈交的论文是本人在导师指导下进行的研究工作。
- 除了文中特别加以标注和致谢的地方外，论文中不包含其他人已发表或撰写过
- 的研究成果。参与同一工作的其他同志对本研究所做的任何贡献均已在论文中
- 作了明确的说明并表示了谢意。
- \vskip2.3cm
- \hfill 签名: \underline{\hskip3cm} 
- 日期: \underline{\hskip3cm}\\
  \vskip2.5cm
  \begin{center}
- \zihao{2}\ifxetex\XBSong\else\bfseries\songti\fi 本论文使用授权说明
+ \zihao{3}\ifxetex\LanTingHei\else\bfseries\heiti\fi 上海大学学位论文原创性声明
+ \end{center} \par
+ \sihao[1.7]
+ 本人郑重声明: 所呈交的学位论文是本人在导师指导下，独立进行研究工作所取得的成果。
+ 除了文中特别加以标注和致谢的内容外，论文中不包含其他人已发表或撰写过的研究成果。
+ 参与同一工作的其他研究者对本研究所做的任何贡献均已在论文中作了明确的说明并表示了谢意。\par
+ \vskip1cm
+ \hfill 学位论文作者签名: \hphantom{空白空白空}\par
+ \vskip1cm
+ \hfill 日期: \hphantom{空白空白}年\hphantom{空白}月\hphantom{空白}日
+ \vskip2.5cm
+ \begin{center}
+ \zihao{3}\ifxetex\LanTingHei\else\bfseries\heiti\fi 上海大学学位论文使用授权说明
  \end{center}
- \par\vskip1.1cm
- 本人完全了解上海大学有关保留、使用学位论文的规定。即：学校有权保留论文
- 及送交论文复印件，允许论文被查阅和借阅；学校可以公布论文的全部或部分内容。\par
+ \par
+ 本人完全了解上海大学有关保留、使用学位论文的规定，即: 学校有权保留论文及送交论文复印件，
+ 允许论文被查阅和借阅；学校可以公布论文的全部或部分内容。\par
  ({\ifxetex\XBSong\else\bfseries\songti\fi 保密的论文在解密后应遵守此规定})
- \vskip1.5cm
- \noindent\hfill 签名: \underline{\hskip2.7cm} 
- 导师签名: \underline{\hskip2.7cm} 
- 日期: \underline{\hskip2.7cm}\hfill
+ \vskip1cm
+ \noindent 学位论文作者签名: \hphantom{空白空白空}
+ \hfill 导师签名: \hphantom{空白空白空白空白} \par
+ \vskip1cm
+ \noindent 日期: \hphantom{空白空}年\hphantom{空白}月\hphantom{空白}日
+ \hfill 日期: \hphantom{空白空}年\hphantom{空白}月\hphantom{空白}日 \par
 \if@openright\cleardoublepage\else\clearpage\fi}
 %</cls>
 %    \end{macrocode}
@@ -2017,7 +2054,7 @@
 % 中文摘要部分的标题为\textbf{摘要}, 用黑体小二号字.
 %    \begin{macrocode}
 \newcommand{\shu@makeabstract}{%
-  \shu@chapter*[]{\cabstractname}
+  \shu@chapter*{\cabstractname}
     \pagestyle{shu@headings}
     \pagenumbering{Roman}
 %    \end{macrocode}
@@ -2035,7 +2072,7 @@
 %
 % 英文摘要部分的标题为 \textbf{Abstract}, 用 Arial 体小二号字. 
 %    \begin{macrocode}
-  \shu@chapter*[]{\eabstractname}
+  \shu@chapter*{\eabstractname}
 %    \end{macrocode}
 %
 % 摘要内容用小四号 Times New Roman.
@@ -2057,13 +2094,13 @@
 % \label{sec:denotationfmt}
 % \begin{environment}{denotation}
 %
-% 主要符号对照表.
+% 主要符号表.
 %    \begin{macrocode}
-%<cfg>\newcommand{\shu@denotation@name}{主要符号对照表}
+%<cfg>\newcommand{\shu@denotation@name}{主要符号表}
 %<*cls>
 \newenvironment{denotation}[1][2.5cm]{%
-  \shu@chapter*[]{\shu@denotation@name} % no tocline
-  \vskip-30bp\xiaosi[1.6]\begin{shu@denotation}[labelwidth=#1]
+  \shu@chapter*{\shu@denotation@name}
+  \vskip-30bp\begin{shu@denotation}[labelwidth=#1]
  }{%
   \end{shu@denotation}
  }
@@ -2130,13 +2167,14 @@
 % 参考文献的设置依赖于 \pkg{natbib} 宏包, 参考文献的正文部分用五号字.
 % 行距采用固定值 16 磅, 段前空 3 磅, 段后空 0 磅.
 %
+% \changes{v2.2.0}{2023/12/18}{参考文献使用小四}
 % \begin{environment}{thebibliography}
 % 修改默认的 thebibliography 环境, 增加一些调整代码.
 %    \begin{macrocode}
 %<*cls>
 \renewenvironment{thebibliography}[1]{%
    \shu@chapter*{\bibname}%
-   \wuhao[1.5]
+   \xiaosi[2]
    \list{\@biblabel{\@arabic\c@enumiv}}%
         {\renewcommand{\makelabel}[1]{##1\hfill}
          \settowidth\labelwidth{1.1cm}
@@ -2178,38 +2216,14 @@
 %
 % \subsection{科研成果}
 % \begin{environment}{publications}
-% 作者在攻读学位期间公开发表的论文和研究成果.
+% \changes{v2.2.0}{2023/12/18}{更改标题}
+% 攻读学位期间取得的研究成果.
 %    \begin{macrocode}
 %<*cfg>
-\newcommand{\shu@publications@title}{作者在攻读\shu@cdegree 学位期间发表的论文与研究成果}
+\newcommand{\shu@publications@title}{攻读\shu@cdegree 学位期间取得的研究成果}
 %</cfg>
 %<*cls>
 \newenvironment{publications}[1][\shu@publications@title]{%
- \shu@chapter*{#1}}{}
-%</cls>
-%    \end{macrocode}
-% \end{environment}
-%
-% \begin{macro}{\researchitem}
-% 研究成果用 \cs{researchitem}\marg{类别} 开启, 包括 ``学术论文" 和 ``研究成果" 两个列表.
-%    \begin{macrocode}
-%<*cls>
-\newcommand{\researchitem}[1]{%
- \vspace{32bp}{\sihao\heiti\centerline{#1}}\par\vspace{14bp}}
-%</cls>
-%    \end{macrocode}
-% \end{macro}
-%
-%
-% \subsection{项目}
-% \begin{environment}{projects}
-% 作者在攻读学位期间所作的项目.
-%    \begin{macrocode}
-%<*cfg>
-\newcommand{\shu@projects@title}{作者在攻读\shu@cdegree 学位期间所作的项目}
-%</cfg>
-%<*cls>
-\newenvironment{projects}[1][\shu@projects@title]{%
  \shu@chapter*{#1}}{}
 %</cls>
 %    \end{macrocode}

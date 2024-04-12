@@ -1,5 +1,5 @@
 % !Mode:: "TeX:UTF-8"
-\documentclass[type=master,openany,pifootnote]{shuthesis}
+\documentclass[type=master,openright,pifootnote]{shuthesis}
 % 选项:
 %  type=[master|doctor],            % 必选
 %  secret,                          % 可选 (如果论文需要保密, 这一项需要打开)
@@ -53,16 +53,11 @@
 \include{data/chap06}
 
 % 参考文献. 
-\bibliographystyle{reference/gbt7714-numerical}
+\bibliographystyle{gbt7714-numerical}
 \bibliography{reference/refs}
 
 \include{data/publications}           % 发表论文清单
-\include{data/projects}               % 项目清单
 \include{data/acknowledgement}        % 致谢
 
 \backmatter
-% \begin{appendix}
-% \input{data/appendix}
-% \end{appendix}
-
 \end{document}

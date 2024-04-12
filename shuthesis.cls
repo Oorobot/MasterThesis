@@ -8,16 +8,16 @@
 %% 
 %% This is a generated file.
 %% 
-%% Copyright (C) 2017-2022 by Lele Liu <ahhylau@gmail.com>
+%% Copyright (C) 2017-2024 by Zhenyu Zhang <zhenyuzhang@shu.edu.cn>
 %% 
 %% This file may be distributed and/or modified under the
-%% conditions of the LaTeX Project Public License, either version 1.3a
+%% conditions of the LaTeX Project Public License, either version 2.0
 %% of this license or (at your option) any later version.
 %% The latest version of this license is in:
 %% 
 %% http://www.latex-project.org/lppl.txt
 %% 
-%% and version 1.3a or later is part of all distributions of LaTeX
+%% and version 2.0 or later is part of all distributions of LaTeX
 %% version 2004/10/01 or later.
 %% 
 %% To produce the documentation run the original source files ending with `.dtx'
@@ -27,19 +27,21 @@
 
 \NeedsTeXFormat{LaTeX2e}[1999/12/01]
 \ProvidesClass{shuthesis}
-[2022/03/13 v2.1.1 Shanghai University Thesis Template]
+[2023/12/18 v2.2.0 Shanghai University Thesis Template]
 \hyphenation{Shu-Thesis}
 \def\shuthesis{\textsc{ShuThesis}}
-\def\version{2.1.1}
+\def\version{2.2.0}
 \RequirePackage{kvoptions}
 \SetupKeyvalOptions{
   family=shu,
   prefix=shu@,
   setkeys=\kvsetkeys}
 \newif\ifshu@master
+\newif\ifshu@profmaster
 \newif\ifshu@doctor
 \define@key{shu}{type}{%
   \shu@masterfalse
+  \shu@profmasterfalse
   \shu@doctorfalse
   \expandafter\csname shu@#1true\endcsname}
 \def\shu@deprecated@type@option{%
@@ -68,10 +70,12 @@
   \newcommand{\HanYikai}{\CJKfamily{HanYikai}}
 \else\fi
 \ifshu@master\relax\else
-  \ifshu@doctor\relax\else
-    \ClassError{shuthesis}%
-    {Please specify thesis type in option: \MessageBreak
-    type=[master|doctor]}{}
+  \ifshu@profmaster\relax\else
+    \ifshu@doctor\relax\else
+      \ClassError{shuthesis}%
+      {Please specify thesis type in option: \MessageBreak
+      type=[master|profmaster|doctor]}{}
+    \fi
   \fi
 \fi
 \RequirePackage{etoolbox}
@@ -123,10 +127,13 @@
 \RequirePackage{makecell}
 \RequirePackage{booktabs}
 \RequirePackage{ulem}
-\RequirePackage[numbers,sort&compress,super,square]{natbib}
+\RequirePackage[numbers,sort&compress,square,super]{natbib}
 \RequirePackage{gbt7714}
 \patchcmd{\@chapter}{\addtocontents{lof}{\protect\addvspace{10\p@}}}{}{}{} % lof
 \patchcmd{\@chapter}{\addtocontents{lot}{\protect\addvspace{10\p@}}}{}{}{} % lot
+\RequirePackage[list=off]{bicaption}
+\captionsetup[figure][bi-second]{name=Figure} % 设置图的英文编号前缀
+\captionsetup[table][bi-second]{name=Table} % 设置表的英文编号前缀
 \RequirePackage{hyperref}
 \ifxetex
   \hypersetup{%
@@ -193,13 +200,13 @@
   \if@openright\cleardoublepage\else\clearpage\fi
   \@mainmattertrue}
 \renewcommand\normalsize{%
-  \@setfontsize\normalsize{12bp}{20bp}%
+  \@setfontsize\normalsize{12bp}{23bp}%
   \abovedisplayskip=13bp \@plus 2bp \@minus 2bp
   \abovedisplayshortskip=13bp \@plus 2bp \@minus 2bp
   \belowdisplayskip=\abovedisplayskip
   \belowdisplayshortskip=\abovedisplayshortskip}
 \def\shu@def@fontsize#1#2{%
-  \expandafter\newcommand\csname #1\endcsname[1][1.3]{%
+  \expandafter\newcommand\csname #1\endcsname[1][2]{%
     \fontsize{#2}{##1\dimexpr #2}\selectfont}}
 \shu@def@fontsize{maxsize}{57bp}
 \shu@def@fontsize{chuhao}{42bp}
@@ -285,11 +292,12 @@
 \captionsetup[table]{position=top,belowskip={12bp-\intextsep},aboveskip=6bp}
 \captionsetup[figure]{position=bottom,belowskip={12bp-\intextsep},aboveskip=6bp}
 \captionsetup[sub]{font=shu,skip=6bp}
+\captionsetup[subfigure]{belowskip=3bp}
 \renewcommand{\thesubfigure}{(\alph{subfigure})}
 \renewcommand{\thesubtable}{(\alph{subtable})}
 \let\shu@LT@array\LT@array
 \def\LT@array{\dawu[1.5]\shu@LT@array} % set default font size
-\RequirePackage[ruled,linesnumbered]{algorithm2e}
+\RequirePackage[ruled,linesnumbered,algochapter]{algorithm2e}
 \def\shu@title@font{%
   \ifshu@arialtitle\sffamily\else\relax\fi}
 \AtBeginDocument{%
@@ -307,8 +315,8 @@
     pagestyle={shu@headings},
     beforeskip={9bp},
     aftername=\hskip\ccwd,
-    afterskip={24bp},
-    format={\centering\shu@title@font\heiti\xiaoer[1]},
+    afterskip={20bp},
+    format={\centering\shu@title@font\heiti\xiaoer[1.2]},
     nameformat=\relax,
     number=\chinese{chapter},
     numberformat=\relax,
@@ -429,6 +437,7 @@
 \shu@parse@keywords{ckeywords}{shu@ckeywords@separator}
 \shu@parse@keywords{ekeywords}{shu@ekeywords@separator}
 \def\shusetup{\kvsetkeys{shu}}
+
 \def\shu@first@page{\renewcommand{\ULthickness}{1.8pt}%
 {\noindent\ifxetex\XBSong\else\bfseries\songti\fi%
 中图分类号：{\bfseries\shu@catalognumber}\hfill 单位代号：{\bfseries 10280\hphantom{000}}\\
@@ -444,12 +453,16 @@
   \raisebox{1ex}[0pt][0pt]{
     \includegraphics[height=3cm,width=9.8cm]{shu.pdf}}\hskip5mm
   \includegraphics[height=3.3cm,width=2.7cm]{shulogo.pdf}\fi\par\vskip5mm
-\hskip3mm{\maxsize\ifxetex\LanTingHei\else\bfseries\heiti\fi\shu@cdegree 学位论文}
+\centerline{\maxsize\ifxetex\LanTingHei\else\bfseries\heiti\fi\shu@cdegree 学位论文}
 \par\vskip-1mm
 \noindent\uline{\hskip\linewidth}\par\vskip1mm
 {\zihao{-1}\bfseries
   \centerline{SHANGHAI~~UNIVERSITY}
-  \centerline{\MakeUppercase{\shu@edegree}'S~~DISSERTATION}}
+  \ifshu@profmaster
+    \centerline{\MakeUppercase{\shu@edegree}'S}
+    \centerline{DISSERTATION}
+  \else
+    \centerline{\MakeUppercase{\shu@edegree}'S~~DISSERTATION}\fi}
 \begin{center}
   {\setlength\arrayrulewidth{1pt}
     \begin{tabular}{|c|c|}
@@ -487,48 +500,51 @@
 {\noindent 姓\hphantom{空白}名：{\shu@cauthor}\hfill 学号：{\shu@id}\\
 论文题目：\let\\=\relax{\shu@ctitle}} \par
 \vskip1.5cm
-\noindent\centerline{\zihao{2} 上海大学} \par
+\noindent\centerline{\zihao{2} \ifxetex\LanTingHei\else\bfseries\heiti\fi 上海大学} \par
 \vskip1.5cm
 \erhao[1.5] 本论文经答辩委员会全体委员审查，
 确认符合上海大学\shu@cdegree 学位论文质量要求。\par
 \vskip3.9cm
 \zihao{-2} 答辩委员会签名:\par
 \vskip1cm
-主席:\par
+主\hphantom{空白}席:\par
 \vskip1cm
-委员:\par
+委\hphantom{空白}员:\par
 \vskip5cm
 导\hphantom{空白}师:\par
 \vskip1cm
-答辩日期:
+答辩日期: \hphantom{空白空白}年\hphantom{空白}月\hphantom{空白}日
 \if@openright\cleardoublepage\else\clearpage\fi
 }
 \newcommand{\shu@authordeclare}{%
 {\noindent 姓\hphantom{空白}名：{\shu@cauthor}\hfill 学号：{\shu@id}\\
 论文题目：\let\\=\relax{\shu@ctitle}} \par
-\begin{center}
-  \zihao{2}\ifxetex\XBSong\else\bfseries\songti\fi 原创性声明
-\end{center}
-\par\vskip1cm\sihao[1.7]
-本人声明：所呈交的论文是本人在导师指导下进行的研究工作。
-除了文中特别加以标注和致谢的地方外，论文中不包含其他人已发表或撰写过
-的研究成果。参与同一工作的其他同志对本研究所做的任何贡献均已在论文中
-作了明确的说明并表示了谢意。
-\vskip2.3cm
-\hfill 签名: \underline{\hskip3cm}
-日期: \underline{\hskip3cm}\\
 \vskip2.5cm
 \begin{center}
-  \zihao{2}\ifxetex\XBSong\else\bfseries\songti\fi 本论文使用授权说明
+  \zihao{3}\ifxetex\LanTingHei\else\bfseries\heiti\fi 上海大学学位论文原创性声明
+\end{center} \par
+\sihao[1.7]
+本人郑重声明: 所呈交的学位论文是本人在导师指导下，独立进行研究工作所取得的成果。
+除了文中特别加以标注和致谢的内容外，论文中不包含其他人已发表或撰写过的研究成果。
+参与同一工作的其他研究者对本研究所做的任何贡献均已在论文中作了明确的说明并表示了谢意。\par
+\vskip1cm
+\hfill 学位论文作者签名: \hphantom{空白空白空}\par
+\vskip1cm
+\hfill 日期: \hphantom{空白空白}年\hphantom{空白}月\hphantom{空白}日
+\vskip2.5cm
+\begin{center}
+  \zihao{3}\ifxetex\LanTingHei\else\bfseries\heiti\fi 上海大学学位论文使用授权说明
 \end{center}
-\par\vskip1.1cm
-本人完全了解上海大学有关保留、使用学位论文的规定。即：学校有权保留论文
-及送交论文复印件，允许论文被查阅和借阅；学校可以公布论文的全部或部分内容。\par
+\par
+本人完全了解上海大学有关保留、使用学位论文的规定，即: 学校有权保留论文及送交论文复印件，
+允许论文被查阅和借阅；学校可以公布论文的全部或部分内容。\par
 ({\ifxetex\XBSong\else\bfseries\songti\fi 保密的论文在解密后应遵守此规定})
-\vskip1.5cm
-\noindent\hfill 签名: \underline{\hskip2.7cm}
-导师签名: \underline{\hskip2.7cm}
-日期: \underline{\hskip2.7cm}\hfill
+\vskip1cm
+\noindent 学位论文作者签名: \hphantom{空白空白空}
+\hfill 导师签名: \hphantom{空白空白空白空白} \par
+\vskip1cm
+\noindent 日期: \hphantom{空白空}年\hphantom{空白}月\hphantom{空白}日
+\hfill 日期: \hphantom{空白空}年\hphantom{空白}月\hphantom{空白}日 \par
 \if@openright\cleardoublepage\else\clearpage\fi}
 \newcommand{\shu@cncover}{%
   \vspace*{1.3cm}
@@ -598,20 +614,20 @@
   \box\shu@kw#2\par
   \endgroup}
 \newcommand{\shu@makeabstract}{%
-  \shu@chapter*[]{\cabstractname}
+  \shu@chapter*{\cabstractname}
   \pagestyle{shu@headings}
   \pagenumbering{Roman}
   \shu@cabstract
   \vskip12bp
   \shu@put@keywords{\heiti\shu@ckeywords@title}{\shu@ckeywords}
-  \shu@chapter*[]{\eabstractname}
+  \shu@chapter*{\eabstractname}
   \shu@eabstract
   \vskip12bp
   \shu@put@keywords{%
     \textbf{Keywords}:\enskip}{\shu@ekeywords}}
 \newenvironment{denotation}[1][2.5cm]{%
-  \shu@chapter*[]{\shu@denotation@name} % no tocline
-  \vskip-30bp\xiaosi[1.6]\begin{shu@denotation}[labelwidth=#1]
+  \shu@chapter*{\shu@denotation@name}
+  \vskip-30bp\begin{shu@denotation}[labelwidth=#1]
     }{%
   \end{shu@denotation}
 }
@@ -643,7 +659,7 @@
 \let\l@table\l@figure
 \renewenvironment{thebibliography}[1]{%
   \shu@chapter*{\bibname}%
-  \wuhao[1.5]
+  \xiaosi[2]
   \list{\@biblabel{\@arabic\c@enumiv}}%
   {\renewcommand{\makelabel}[1]{##1\hfill}
     \settowidth\labelwidth{1.1cm}
@@ -669,10 +685,6 @@
   \shu@appendix}{%
   \let\title\@gobble}
 \newenvironment{publications}[1][\shu@publications@title]{%
-  \shu@chapter*{#1}}{}
-\newcommand{\researchitem}[1]{%
-  \vspace{32bp}{\sihao\heiti\centerline{#1}}\par\vspace{14bp}}
-\newenvironment{projects}[1][\shu@projects@title]{%
   \shu@chapter*{#1}}{}
 \AtEndOfClass{\input{shuthesis.cfg}}
 \AtEndOfClass{\sloppy}

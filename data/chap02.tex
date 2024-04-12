@@ -11,7 +11,7 @@
 
 在模型方面，传统的机器学习模型实现简单，决策依据直观可理解，但对于复杂图像如图像噪声干扰较多，不同类别之间差异小等问题，其性能会大大下降。此外，传统机器学习依赖于特征提取，难以实现全自动化，性能极大受限于手工特征的有效性。随着计算机硬件的快速发展，特别是图形处理器（Graphics Processing Unit，GPU），以及大规模训练数据集（ImageNet\cite{deng2009imagenet}、CelebA\cite{liu2018large}等）的出现，深度学习方法在计算机视觉领域中其优越性在不断凸显。相比较于传统的图像识别技术，深度学习方法不再需要人工设计的手工特征，而是通过神经网络模型自主地在训练数据集中学习到潜在有效的特征，这很好地将特征提取融合到模型设计之中，解决了人工设计特征的难题。由此，深度学习方法开始逐步替代传统的机器学习方法成为了主流，得到了飞跃式的进展。
 
-\textbf{本文围绕动态骨显像和PET/CT进行相关研究。由于动态骨显像和PET/CT的特点，导致难以直接应用深度学习方法进行影像特征提取。例如，动态骨显像和PET/CT都是单通道的图像数据，以强度的大小与分布来进行表示。其中，动态骨显像与PET可以展示人体组织生理代谢的强弱，而CT可以展示人体组织的解剖结构信息。影像中的无关区域与干扰区域会影响最终分类的精度，且单独的图像特征并不充足。动态骨显像还具有时序上的特征；而PET/CT还具有更全面的立体特征。}
+本文围绕动态骨显像和PET/CT进行相关研究。由于动态骨显像和PET/CT的特点，导致难以直接应用深度学习方法进行影像特征提取。例如，动态骨显像和PET/CT都是单通道的图像数据，以强度的大小与分布来进行表示。其中，动态骨显像与PET可以展示人体组织生理代谢的强弱，而CT可以展示人体组织的解剖结构信息。影像中的无关区域与干扰区域会影响最终分类的精度，且单独的图像特征并不充足。动态骨显像还具有时序上的特征；而PET/CT还具有更全面的立体特征。
 
 \subsection{图像分类算法}
 
@@ -20,7 +20,7 @@
 \begin{figure}[h]
   \centering
   \includegraphics[width=\textwidth]{figures/chap02_cnn.jpg}
-  \caption{卷积神经网络示意图}
+  \bicaption{卷积神经网络示意图}{Schematic of the convolutional neural network}
   \label{fig:chap02_cnn}
 \end{figure}
 
@@ -40,7 +40,7 @@ VGG\cite{Simonyan2014VeryDC}（2014）的网络结构简单而有效。与AlexNe
 \begin{figure}[ht]
   \centering
   \includegraphics[width=\textwidth]{figures/chap02_block.jpg}
-  \caption{不同卷积神经网络的模块示意图}
+  \bicaption{不同卷积神经网络的模块示意图}{Schematic of the modules of different convolutional neural networks}
   \label{fig:chap02_block}
 \end{figure}
 
@@ -55,7 +55,7 @@ ConvNeXt\cite{liu2022convnet}（2022）从ResNet模型出发，在Swin Transform
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=\textwidth]{figures/chap02_vit.jpg}
-  \caption{Vision Transformer}
+  \bicaption{Vision Transformer示意图}{Schematic of Vision Transformer}
   \label{fig:chap02_vit}
 \end{figure}
 
@@ -65,12 +65,12 @@ Swin Transformer\cite{liu2021swin}（2021）是一种新型的Transformer，专�
 
 Transformer iN Transformer\cite{han2021transformer}（TNT，2021）是另一种创新Transformer架构，它在传统的自注意力机制中嵌入了一个自注意力机制。这个设计的关键是它内部具有两级Transformer结构：第一级抓取像素级的特征，而第二级聚焦于区域特征，从而对整个图像进行特征表示。这种内外Transformer的组合使得这个架构能够更有效地捕获图像内部的复杂结构。
 
-综上所述，CNN和新兴的Transformer都是计算机视觉领域中的强大工具，它们在特征提取和模式识别方面展现出杰出的优势。对于CNN而言，其卷积层具有固定且较小的感受野，这使其能够有效地识别局部特征，如边缘、形状和纹理等，但可以通过多层堆叠以捕捉全局上下文信息。而Transformer通过自注意力机制可以捕捉到全局上下文信息，从而实现对整张图像的理解。然而，Transformer模型的训练需要依赖大量数据，而数据集小是医学影像领域普遍面临的问题。因此，CNN成为了更值得探索的方法。\textbf{对于动态骨显像和PET/CT诊断分类任务而言，CNN可以有效地学习到病灶区域中局部关键性特征，例如生理摄取的形态和解剖结构的细节。然而，对于具有时序性特点的动态骨显像，由于CNN并非专门为处理序列数据而设计，其在这方面的能力是受限的。}
+综上所述，CNN和新兴的Transformer都是计算机视觉领域中的强大工具，它们在特征提取和模式识别方面展现出杰出的优势。对于CNN而言，其卷积层具有固定且较小的感受野，这使其能够有效地识别局部特征，如边缘、形状和纹理等，但可以通过多层堆叠以捕捉全局上下文信息。而Transformer通过自注意力机制可以捕捉到全局上下文信息，从而实现对整张图像的理解。然而，Transformer模型的训练需要依赖大量数据，而数据集小是医学影像领域普遍面临的问题。因此，CNN成为了更值得探索的方法。对于动态骨显像和PET/CT诊断分类任务而言，CNN可以有效地学习到病灶区域中局部关键性特征，例如生理摄取的形态和解剖结构的细节。然而，对于具有时序性特点的动态骨显像，由于CNN并非专门为处理序列数据而设计，其在这方面的能力是受限的。
 
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=\textwidth]{figures/chap02_rnn.jpg}
-  \caption{循环神经网络示意图}
+  \bicaption{循环神经网络示意图}{Schematic of the recurrent neural network}
   \label{fig:chap02_rnn}
 \end{figure}
 
@@ -91,7 +91,7 @@ GRU\cite{chung2014empirical}（2014）相比较于LSTM，简化内部繁琐的�
 
 Yiugit等人\cite{yiugit2021simple}于2021年提出了两种简单且有效的GRU变体：GRU1和GRU2。通过一种基于经验的方法，这些学者试图确定一组能够提高GRU准确度或降低损失的系数\(\epsilon,\alpha\)。其中，\(\epsilon\)确定门控循环单元的作用力度，\(\alpha\)确定门控当前单元门的作用力度。相比较于GRU，GRU1增加了当前单元的作用，而GRU2减少了循环单元的作用。值得说明的是，对标准GRU算法进行这样微小且简便的调整能够显著提升其性能。
 
-综上所述，RNN及其变体为处理序列数据提供了富有弹性的学习架构。RNN以其简单的循环连接结构，去捕获时序信息，但仍存在梯度消失或爆炸的问题。LSTM和GRU则引入门控机制，有效地保存长期依赖关系，优化了信息的存储与过滤，降低了梯度消失和爆炸的风险。\textbf{对于动态骨显像中的假体关节感染诊断任务而言，不仅需要关注每张图像中的病灶摄取形态特征，还需要抓取跟时序相关的生理代谢差异变化特征，RNN和CNN的有效结合将适用于该任务的模型设计，同样也是图像序列分类任务的重点研究方向之一。}
+综上所述，RNN及其变体为处理序列数据提供了富有弹性的学习架构。RNN以其简单的循环连接结构，去捕获时序信息，但仍存在梯度消失或爆炸的问题。LSTM和GRU则引入门控机制，有效地保存长期依赖关系，优化了信息的存储与过滤，降低了梯度消失和爆炸的风险。对于动态骨显像中的假体关节感染诊断任务而言，不仅需要关注每张图像中的病灶摄取形态特征，还需要抓取跟时序相关的生理代谢差异变化特征，RNN和CNN的有效结合将适用于该任务的模型设计，同样也是图像序列分类任务的重点研究方向之一。
 
 \subsection{医学影像分类算法}
 
@@ -107,13 +107,13 @@ Takahashi等人\cite{takahashi2022deep}（2022）探索了一种创新的图像�
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.8\textwidth]{figures/chap02_mip.jpg}
-  \caption{最大强度投影四个角度的图像输入到卷积神经网络进行预测的示意图}
+  \bicaption{四个角度最大强度投影图像作为输入进行预测的示意图}{Schematic of four angular maximum intensity projection images as input for prediction}
   \label{fig:chap02_mip}
 \end{figure}
 
-\textbf{综上所述，对于动态骨显像中假体关节感染任务，以上研究存在一些可借鉴之处。}例如，将时序性图像的固有三维性质，直接采用三维CNN进行特征提取似乎是一种直观的策略。然而，传统的CNN在捕捉长期时序依赖方面存在局限性。\textbf{由此，结合使用CNN和RNN，以便在时间序列的内部和之间提取综合特征，对于该特定医学任务来说可能更加精准和适宜。}同时，也应该重视任务的特定难点，比如无关区域干扰和生理状态下高摄取区域可能对分类精度造成的负面影响。\textbf{鉴于此，研究并设计针对动态骨显像的数据预处理方法，去有效减少负面影响，进一步优化深度学习模型的性能，是提高诊断精准度的关键。}
+综上所述，对于动态骨显像中假体关节感染任务，以上研究存在一些可借鉴之处。例如，将时序性图像的固有三维性质，直接采用三维CNN进行特征提取似乎是一种直观的策略。然而，传统的CNN在捕捉长期时序依赖方面存在局限性。由此，结合使用CNN和RNN，以便在时间序列的内部和之间提取综合特征，对于该特定医学任务来说可能更加精准和适宜。同时，也应该重视任务的特定难点，比如无关区域干扰和生理状态下高摄取区域可能对分类精度造成的负面影响。鉴于此，研究并设计针对动态骨显像的数据预处理方法，去有效减少负面影响，进一步优化深度学习模型的性能，是提高诊断精准度的关键。
 
-\textbf{在PET/CT影像中的骨折相关感染任务中，}考虑到PET/CT为三维影像数据，直接采用三维CNN是一个不错的选项，以便充分利用体积数据的空间信息。同时，\textbf{考虑到计算复杂度和数据维度的挑战，采用MIP对数据进行降维处理也是一个有效的替代方案。}此外，针对PET/CT影像的特定情况，如多病灶的存在和相对较小的病灶区域在整体影像中难以突显导致传统的深度学习模型可能无法有效集中于关键的病灶区域的问题，需要特别关注。\textbf{因此，开展针对PET/CT影像的专门预处理方法研究和引入检测算法定位病灶区域，并对其进行截取或突出处理，可以在不损失重要信息的前提下减少背景噪声的干扰，进而提高深度学习模型在骨折相关感染检测任务中的准确性和效率。}
+在PET/CT影像中的骨折相关感染任务中，考虑到PET/CT为三维影像数据，直接采用三维CNN是一个不错的选项，以便充分利用体积数据的空间信息。同时，考虑到计算复杂度和数据维度的挑战，采用MIP对数据进行降维处理也是一个有效的替代方案。此外，针对PET/CT影像的特定情况，如多病灶的存在和相对较小的病灶区域在整体影像中难以突显导致传统的深度学习模型可能无法有效集中于关键的病灶区域的问题，需要特别关注。因此，开展针对PET/CT影像的专门预处理方法研究和引入检测算法定位病灶区域，并对其进行截取或突出处理，可以在不损失重要信息的前提下减少背景噪声的干扰，进而提高深度学习模型在骨折相关感染检测任务中的准确性和效率。
 
 \section{图像检测}
 
@@ -130,7 +130,7 @@ Takahashi等人\cite{takahashi2022deep}（2022）探索了一种创新的图像�
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=\textwidth]{figures/chap02_unet.jpg}
-  \caption{U-Net整体结构示意图}
+  \bicaption{U-Net整体结构示意图}{Schematic of the overall structure of U-Net}
   \label{fig:chap02_unet}
 \end{figure}
 
@@ -144,14 +144,14 @@ U-Net 3+\cite{huang2020unet}（2020）是在U-Net的基础上发展出来的一�
 
 TransU-Net\cite{chen2021transunet}（2021）是一种结合了卷积强大的局部特征提取能力和Transformer的全局自注意力机制的新型网络架构。它先使用卷积提取空间特征，再利用Transformer编码器以捕获长距离上下文关系，最后通过解码器来输出精确的分割结果。这种混合架构使得TransU-Net在分割精度上超越了传统的CNN网络。
 
-综上，U-Net及其变体具有强大的特征学习能力，在医学影像处理中得到了广泛的应用。每个变体都是为了解决特定问题而设计，比如改进特征的捕获能力、更精确地分割图像中的特定部分等。随着深度学习技术的进步，将会有更多的U-Net变体被提出来解决更复杂的医学影像分割任务。\textbf{在PET/CT中，用于识别骨折相关感染病灶的任务面临的挑战在于感染区域的形态分布呈现多样性，包括但不限于点状、簇状或弥散性分布。这种分布的复杂多样性导致利用像素级定位进行精确标注和检测变得较为困难。因此，本研究的重点在于目标检测模型。}
+综上，U-Net及其变体具有强大的特征学习能力，在医学影像处理中得到了广泛的应用。每个变体都是为了解决特定问题而设计，比如改进特征的捕获能力、更精确地分割图像中的特定部分等。随着深度学习技术的进步，将会有更多的U-Net变体被提出来解决更复杂的医学影像分割任务。在PET/CT中，用于识别骨折相关感染病灶的任务面临的挑战在于感染区域的形态分布呈现多样性，包括但不限于点状、簇状或弥散性分布。这种分布的复杂多样性导致利用像素级定位进行精确标注和检测变得较为困难。因此，本研究的重点在于目标检测模型。
 
 在目标检测模型中，深度学习方法主要分为两大类：二阶段检测器和一阶段检测器。
 
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.8\textwidth]{figures/chap02_rcnn.jpg}
-  \caption{R-CNN整体结构示意图}
+  \bicaption{R-CNN整体结构示意图}{Schematic of the overall structure of R-CNN}
   \label{fig:chap02_rcnn}
 \end{figure}
 
@@ -166,7 +166,7 @@ Faster R-CNN\cite{ren2015faster}（2015）在Fast R-CNN的基础上创新地引�
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.8\textwidth]{figures/chap02_yolo.jpg}
-  \caption{YOLO整体结构示意图}
+  \bicaption{YOLO整体结构示意图}{Schematic of the overall structure of YOLO}
   \label{fig:chap02_yolo}
 \end{figure}
 
@@ -182,7 +182,7 @@ YOLOv5\cite{jocher2020yolov5}（2020）是YOLO系列的又一迭代，而其自�
 
 YOLOX\cite{ge2021yolox}（2021）是一个新兴的目标检测架构，它在YOLOv3的基础上做了优化和改进，目标是在性能和灵活性之间取得更好的平衡。YOLOX的主要特点是它放弃了原有的锚框机制，采用了无锚框的设计，这使得网络在训练时对各种大小的目标有更好的适应能力。除此之外，YOLOX采用了解耦的头部设计，在分类和回归两个不同的任务上分开进行预测。
 
-综上所述，一阶段目标检测器得益于算法和计算能力的提升，在目标检测任务中表现出色。它们在处理速度上显著优于二阶段检测器，满足实时处理的需求。速度的提升并未以牺牲准确率为代价，经过精心的网络设计和训练，一阶段检测器在不断地缩小与二阶段检测器的精度差距，甚至超越了它们。\textbf{因此，在PET/CT的病灶检测任务中，面对感染区域的复杂多样性，选择一阶段检测器提供了一个既快速又准确的检测策略。}
+综上所述，一阶段目标检测器得益于算法和计算能力的提升，在目标检测任务中表现出色。它们在处理速度上显著优于二阶段检测器，满足实时处理的需求。速度的提升并未以牺牲准确率为代价，经过精心的网络设计和训练，一阶段检测器在不断地缩小与二阶段检测器的精度差距，甚至超越了它们。因此，在PET/CT的病灶检测任务中，面对感染区域的复杂多样性，选择一阶段检测器提供了一个既快速又准确的检测策略。
 
 \subsection{医学影像检测算法}
 
@@ -199,11 +199,11 @@ Huang等人\cite{huang2022isa}（2022）利用深度学习技术，提出了一�
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=\textwidth]{figures/chap02_isanet.jpg}
-  \caption{融合PET和CT的目标分割方法}
+  \bicaption{融合PET和CT的目标分割方法}{Object segmentation method by fusing PET and CT}
   \label{fig:chap02_isanet}
 \end{figure}
 
-\textbf{通过上述研究，可以明确认识到在PET/CT中定位骨折相关感染的任务需要充分利用PET与CT两种不同模态提供的信息。整合和发挥两者的独特优势至关重要。因此，探讨一个双分支网络架构是一个非常值得考虑的方向。同时，还需面对PET/CT中高摄取区域所带来的干扰问题，并采用创新性的实用方法予以解决。借鉴以往研究中有效的技术方案，并结合本研究任务的具体特性，提高定位准确性是本研究努力的核心目标。}
+通过上述研究，可以明确认识到在PET/CT中定位骨折相关感染的任务需要充分利用PET与CT两种不同模态提供的信息。整合和发挥两者的独特优势至关重要。因此，探讨一个双分支网络架构是一个非常值得考虑的方向。同时，还需面对PET/CT中高摄取区域所带来的干扰问题，并采用创新性的实用方法予以解决。借鉴以往研究中有效的技术方案，并结合本研究任务的具体特性，提高定位准确性是本研究努力的核心目标。
 
 \section{本章小结}
 
